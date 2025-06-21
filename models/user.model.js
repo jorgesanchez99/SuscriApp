@@ -28,10 +28,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'La contraseña es obligatoria'],
-        minlength: [8, 'La contraseña debe tener al menos 6 caracteres'],
-        maxlength: [50, 'La contraseña no debe superar los 50 caracteres'],
-        // match: [/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número'],
-        select: false, // No mostrar la contraseña por defecto
+        //select: false, // No mostrar la contraseña por defecto
     },
     createdAt: {
         type: Date,
