@@ -1,29 +1,65 @@
-import User from "../models/user.model.js";
-
+import UserService from "../services/user.service.js";
 
 export const getAllUsers = async (req, res, next) => {
     try {
-        const users = await User.find().select("-password -__v");
-        res.status(200).json({ success: true, data: users });
+        const { page, limit } = req.query;
+        const options = {
+            page: parseInt(page) || 1,
+            limit: parseInt(limit) || 10
+        };
+
+        const result = await UserService.getAllUsers(options);
+        
+        res.status(200).json({ 
+            success: true, 
+            data: result.users,
+            pagination: result.pagination
+        });
     } catch (error) {
-        // console.error("Error al obtener los usuarios:", error);
-        // res.status(500).json({ message: "Error interno del servidor" });
         next(error);
     }
 }
 
-export const getUserById = async (req, res,next) => {
-    const userId  = req.params.id;
-
+export const getUserById = async (req, res, next) => {
     try {
-        const user = await User.findById(userId).select("-password -__v");
-        if (!user) {
-            const message = "Usuario no encontrado";
-            const error = new Error(message);
-            error.statusCode = 404; // Not Found
-            throw error;
-        }
-        res.status(200).json({ success: true, data: user });
+        const userId = req.params.id;
+        const user = await UserService.getUserById(userId);
+
+        res.status(200).json({ 
+            success: true, 
+            data: user 
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const updateUser = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const updateData = req.body;
+        
+        const updatedUser = await UserService.updateUser(userId, updateData);
+
+        res.status(200).json({
+            success: true,
+            message: "Usuario actualizado exitosamente",
+            data: updatedUser
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        await UserService.deleteUser(userId);
+
+        res.status(200).json({
+            success: true,
+            message: "Usuario eliminado exitosamente"
+        });
     } catch (error) {
         next(error);
     }

@@ -1,18 +1,30 @@
 import {Router} from "express";
 import authorized from "../middlewares/auth.middleware.js";
-import {createSubscription, getUserSubscriptions} from "../controllers/subscription.controller.js";
+import {
+    createSubscription, 
+    getAllSubscriptions,
+    getSubscriptionById,
+    getUserSubscriptions,
+    updateSubscription,
+    cancelSubscription,
+    deleteSubscription,
+    getUpcomingRenewals,
+    getUserSubscriptionStats
+} from "../controllers/subscription.controller.js";
 
 const subscriptionRouter = Router();
 
-subscriptionRouter.get('/', (req, res) => res.send({title: "Get All Subscriptions"}));
-subscriptionRouter.get('/:id', (req, res) => res.send({title: "Get Subscription Details"}));
-subscriptionRouter.post('/',authorized ,createSubscription);
-subscriptionRouter.put('/:id', (req, res) => res.send({title: "Update Subscription"}));
-subscriptionRouter.delete('/:id', (req, res) => res.send({title: "Delete Subscription"}));
+// Rutas públicas (requieren autenticación pero no verificación de propiedad)
+subscriptionRouter.get('/', authorized, getAllSubscriptions);
+subscriptionRouter.get('/:id', authorized, getSubscriptionById);
+subscriptionRouter.post('/', authorized, createSubscription);
+subscriptionRouter.put('/:id', authorized, updateSubscription);
+subscriptionRouter.delete('/:id', authorized, deleteSubscription);
 
-subscriptionRouter.get('/users/:id',authorized, getUserSubscriptions);
-subscriptionRouter.put('/:id/cancel', (req, res) => res.send({title: "Cancel Subscription"}));
-subscriptionRouter.get('/upcoming-renewals', (req, res) => res.send({title: "Get Upcoming Renewals"}));
-
+// Rutas específicas del usuario
+subscriptionRouter.get('/users/:id', authorized, getUserSubscriptions);
+subscriptionRouter.put('/:id/cancel', authorized, cancelSubscription);
+subscriptionRouter.get('/user/upcoming-renewals', authorized, getUpcomingRenewals);
+subscriptionRouter.get('/user/stats', authorized, getUserSubscriptionStats);
 
 export default subscriptionRouter;
