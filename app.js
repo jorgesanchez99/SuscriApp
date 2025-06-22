@@ -6,6 +6,7 @@ import subscriptionRouter from "./routes/subscription.routes.js";
 import connectToDatabase from "./database/mongodb.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
+import arjectMiddleware from "./middlewares/arject.middleware.js";
 
 const app = express();
 
@@ -14,13 +15,15 @@ app.use(express.json());
 // Middleware to parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 // Middleware to parse cookies
-app.use(cookieParser())
+app.use(cookieParser());
 // // Middleware to handle CORS
 // import cors from "cors";
 // app.use(cors());
 // // Middleware to handle static files
 // import path from "path";
 // app.use(express.static(path.join(process.cwd(), "public")));
+
+app.use(arjectMiddleware);
 
 // Middleware to handle API versioning
 app.use("/api/v1/users", userRouter);
