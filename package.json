@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "lint": "eslint .",
+    "generate:jwt": "node scripts/generate-jwt-secret.js"
   },
   "dependencies": {
     "@arcjet/inspect": "^1.0.0-beta.8",
