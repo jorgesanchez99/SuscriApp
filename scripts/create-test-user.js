@@ -35,7 +35,7 @@ const createTestUser = async () => {
         console.log();
 
         // Conectar a MongoDB
-        const mongoUri = process.env.MONGODB_URI || process.env.DB_URI;
+        const mongoUri =  process.env.DB_URI;
         if (!mongoUri) {
             console.error('❌ No se encontró URI de MongoDB en las variables de entorno');
             process.exit(1);
@@ -49,7 +49,7 @@ const createTestUser = async () => {
             console.log('🔍 Usuario de prueba ya existe:');
             console.log(`   👤 Nombre: ${testUser.name} ${testUser.lastName}`);
             console.log(`   📧 Email: ${testUser.email}`);
-            console.log(`   🆔 ID: ${testUser._id}`);
+            console.log(`   🆔 ID: ${testUser.id}`);
             console.log(`   📅 Creado: ${testUser.createdAt?.toLocaleString() || 'Fecha desconocida'}`);
             console.log();
             console.log('✅ Usuario de prueba listo para usar');
@@ -63,14 +63,14 @@ const createTestUser = async () => {
             console.log('✅ Usuario de prueba creado exitosamente:');
             console.log(`   👤 Nombre: ${testUser.name} ${testUser.lastName}`);
             console.log(`   📧 Email: ${testUser.email}`);
-            console.log(`   🆔 ID: ${testUser._id}`);
+            console.log(`   🆔 ID: ${testUser.id}`);
             console.log(`   🔐 Contraseña: ${TEST_USER.password}`);
         }
 
         console.log();        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('📋 Datos para testing:');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log(`Usuario ID: ${testUser._id}`);
+        console.log(`Usuario ID: ${testUser.id}`);
         console.log(`Email: ${TEST_USER.email}`);
         console.log(`Contraseña: ${TEST_USER.password}`);
         console.log();
@@ -85,11 +85,6 @@ const createTestUser = async () => {
         console.log(`     "email": "${TEST_USER.email}",`);
         console.log(`     "password": "${TEST_USER.password}"`);
         console.log('   }');
-        console.log();
-        console.log('3️⃣ Usar en curl:');
-        console.log(`   curl -X POST http://localhost:4000/api/v1/auth/sign-in \\`);
-        console.log('        -H "Content-Type: application/json" \\');
-        console.log(`        -d '{"email":"${TEST_USER.email}","password":"${TEST_USER.password}"}'`);
         console.log();
         console.log('💡 Ventajas de este usuario:');
         console.log('   ✅ Datos conocidos y consistentes');

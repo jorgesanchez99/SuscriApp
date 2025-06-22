@@ -33,7 +33,7 @@ const getTestingToken = async () => {
         console.log();
 
         // Conectar a MongoDB
-        const mongoUri = process.env.MONGODB_URI || process.env.DB_URI;
+        const mongoUri =  process.env.DB_URI;
         if (!mongoUri) {
             console.error('❌ No se encontró URI de MongoDB en las variables de entorno');
             process.exit(1);
@@ -56,7 +56,7 @@ const getTestingToken = async () => {
         console.log('👤 Usuario de prueba encontrado:');
         console.log(`   📧 Email: ${testUser.email}`);
         console.log(`   🏷️ Nombre: ${testUser.name} ${testUser.lastName}`);
-        console.log(`   🆔 ID: ${testUser._id}`);
+        console.log(`   🆔 ID: ${testUser.id}`);
         console.log();
 
         // Hacer login real para obtener token
@@ -78,16 +78,11 @@ const getTestingToken = async () => {
         console.log('💡 Cómo usar en Swagger:');
         console.log('   1. Ve a http://localhost:4000/api-docs');
         console.log('   2. Haz clic en "Authorize" 🔒');
-        console.log('   3. Pega el token completo (incluyendo "Bearer ")');
+        console.log('   3. Pega el token completo');
         console.log('   4. Haz clic en "Authorize"');
         console.log('   5. ¡Prueba los endpoints protegidos!');
         console.log();
         
-        console.log('🔗 Ejemplo con curl:');
-        console.log(`   curl -H "Authorization: Bearer ${loginResult.token}" \\`);
-        console.log(`        http://localhost:4000/api/v1/subscriptions`);
-        console.log();
-
     } catch (error) {
         console.error('❌ Error:', error.message);
         

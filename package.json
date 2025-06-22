@@ -9,8 +9,6 @@
     "test:db": "node scripts/test-db-connection.js",
     "test:user": "node scripts/create-test-user.js",
     "test:token": "node scripts/get-testing-token.js",
-    "test:login": "node scripts/real-login.js",
-    "test:auth": "node scripts/test-auth-flow.js",
     "generate:jwt": "node scripts/generate-jwt-secret.js"
   },
   "dependencies": {
