@@ -22,7 +22,6 @@ const subscriptionSchema = new mongoose.Schema({
     },
     frequency: {
         type: String,
-        required: [true, 'La frecuencia de la suscripción es obligatoria'],
         enum: ['diaria','semanal','mensual', 'anual'],
         default: 'mensual',
     },
@@ -40,7 +39,6 @@ const subscriptionSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        required: [true, 'El estado de la suscripción es obligatorio'],
         enum: ['activa', 'cancelada', 'pendiente', 'expirada'],
         default: 'activa',
     },
