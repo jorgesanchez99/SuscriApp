@@ -2,12 +2,13 @@
   "name": "suscripciontracker",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "scripts": {
+  "type": "module",  "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
     "lint": "eslint .",
     "test:db": "node scripts/test-db-connection.js",
+    "test:user": "node scripts/create-test-user.js",
+    "test:token": "node scripts/generate-test-token.js",
     "generate:jwt": "node scripts/generate-jwt-secret.js"
   },
   "dependencies": {
@@ -22,7 +23,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

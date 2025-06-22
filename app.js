@@ -8,6 +8,10 @@ import errorMiddleware from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
 import arjectMiddleware from "./middlewares/arject.middleware.js";
 
+// Swagger imports
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpecs from './config/swagger.js';
+
 const app = express();
 
 // Middleware to parse JSON bodies
@@ -25,6 +29,16 @@ app.use(cookieParser());
 
 app.use(arjectMiddleware);
 
+// Configuración de Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: "SuscripcionTracker API Documentation",
+    swaggerOptions: {
+        persistAuthorization: true,
+    }
+}));
+
 // Middleware to handle API versioning
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/auth", authRouter);
@@ -36,13 +50,23 @@ app.use(errorMiddleware);
 
 // Define the root route and send a welcome message
 app.get("/", (req, res) => {
-    res.send('Bienvenido a Suscripcion Tracker API');
+    res.json({
+        message: 'Bienvenido a SuscripcionTracker API',
+        version: '1.0.0',
+        documentation: `http://localhost:${PORT}/api-docs`,
+        endpoints: {
+            users: `/api/v1/users`,
+            auth: `/api/v1/auth`,
+            subscriptions: `/api/v1/subscriptions`
+        }
+    });
 })
 
 
 
 app.listen(PORT, async () => {
-    console.log(`Servidor corriendo en el puerto http://localhost:${PORT}`);
+    console.log(`🚀 Servidor corriendo en el puerto http://localhost:${PORT}`);
+    console.log(`📚 Documentación API disponible en: http://localhost:${PORT}/api-docs`);
 
     await connectToDatabase()
 });
