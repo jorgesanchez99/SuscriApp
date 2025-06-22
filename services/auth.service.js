@@ -98,9 +98,7 @@ class AuthService {
             token,
             user: userResponse
         };
-    }
-
-    /**
+    }    /**
      * Verificar token JWT
      * @param {string} token - Token JWT
      * @returns {Promise<Object>} Usuario decodificado
@@ -108,7 +106,17 @@ class AuthService {
     static async verifyToken(token) {
         try {
             const decoded = jwt.verify(token, JWT_SECRET);
-            const user = await UserService.getUserById(decoded.id);
+            
+            // Soportar tanto 'id' como '_id' para compatibilidad
+            const userId = decoded.id || decoded._id;
+            
+            if (!userId) {
+                const error = new Error("Token no contiene ID de usuario válido");
+                error.statusCode = 401;
+                throw error;
+            }
+            
+            const user = await UserService.getUserById(userId);
             
             if (!user) {
                 const error = new Error("Usuario no encontrado");
@@ -132,15 +140,13 @@ class AuthService {
 
             throw error;
         }
-    }
-
-    /**
+    }    /**
      * Generar token JWT
      * @param {string} userId - ID del usuario
      * @returns {string} Token JWT
      */
     static generateToken(userId) {
-        return jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
+        return jwt.sign({ _id: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRATION });
     }
 
     /**

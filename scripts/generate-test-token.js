@@ -37,16 +37,27 @@ const generateTestToken = async () => {
         const TEST_EMAIL = 'test@suscripciontracker.dev';
         
         try {
-            const mongoUri = process.env.MONGODB_URI || process.env.DB_URI;
-            if (mongoUri) {
+            const mongoUri = process.env.MONGODB_URI || process.env.DB_URI;            if (mongoUri) {
                 await mongoose.connect(mongoUri);
-                const User = mongoose.model('User', new mongoose.Schema({}, { collection: 'users' }));
+                
+                // Definir esquema de usuario para consultas
+                const userSchema = new mongoose.Schema({
+                    name: String,
+                    lastName: String,
+                    email: String,
+                    password: String
+                }, { 
+                    collection: 'users',
+                    timestamps: true 
+                });
+                
+                const User = mongoose.models.User || mongoose.model('User', userSchema);
                 
                 // Buscar usuario de pruebas específico
-                testUser = await User.findOne({ email: TEST_EMAIL });
+                testUser = await User.findOne({ email: TEST_EMAIL }).select('_id email name lastName');
                 
                 // Buscar otros usuarios
-                realUsers = await User.find({}, '_id email name lastName').limit(5);
+                realUsers = await User.find({}).select('_id email name lastName').limit(5);
                 
                 console.log(`📊 Encontrados ${realUsers.length} usuarios en la base de datos`);
                 
@@ -75,7 +86,8 @@ const generateTestToken = async () => {
             console.log();
         }        // Determinar qué usuario usar (priorizar usuario de pruebas)
         let testPayload;
-          if (testUser) {
+        
+        if (testUser) {
             // Usar usuario de pruebas dedicado (RECOMENDADO)
             testPayload = {
                 _id: testUser._id.toString(),
@@ -99,15 +111,19 @@ const generateTestToken = async () => {
             console.log(`👤 Usuario: ${testPayload.name} (${testPayload.email})`);
             console.log('💡 Considera crear un usuario de pruebas: npm run test:user');
         } else {
-            // Usar usuario ficticio
-            testPayload = {
-                _id: '507f1f77bcf86cd799439011',
-                email: 'test@example.com',
-                name: 'Usuario Test',
-                iat: Math.floor(Date.now() / 1000)
-            };
-            console.log('⚠️ Usando usuario FICTICIO (puede causar errores)');
-            console.log('💡 Crea un usuario de pruebas: npm run test:user');
+            // NO GENERAR TOKEN FICTICIO - Error y salir
+            console.log('❌ ERROR: No se encontraron usuarios en la base de datos');
+            console.log();
+            console.log('📋 Para generar un token válido necesitas:');
+            console.log('   1. Tener conexión a la base de datos MongoDB');
+            console.log('   2. Al menos un usuario registrado en la base de datos');
+            console.log();
+            console.log('🔧 Soluciones:');
+            console.log('   • Crear usuario de pruebas: npm run test:user');
+            console.log('   • Hacer login real: npm run test:login');
+            console.log('   • Verificar conexión DB: npm run test:db');
+            console.log();
+            process.exit(1);
         }
 
         const token = jwt.sign(testPayload, jwtSecret, {
@@ -125,9 +141,9 @@ const generateTestToken = async () => {
         console.log('📋 Información del token:');
         console.log(`   👤 Usuario ID: ${testPayload._id}`);
         console.log(`   📧 Email: ${testPayload.email}`);
-        console.log(`   🏷️ Nombre: ${testPayload.name}`);
-        console.log(`   ⏰ Expira en: ${process.env.JWT_EXPIRATION || '24h'}`);
-        console.log(`   📅 Válido hasta: ${new Date(testPayload.exp * 1000).toLocaleString()}`);
+        console.log(`   🏷️ Nombre: ${testPayload.name}`);        console.log(`   ⏰ Expira en: ${process.env.JWT_EXPIRATION || '24h'}`);
+        const expDate = new Date((testPayload.iat + (24 * 60 * 60)) * 1000); // Asumiendo 24h por defecto
+        console.log(`   📅 Válido hasta: ${expDate.toLocaleString()}`);
         console.log();
         console.log('💡 Cómo usar:');
         console.log('   1. Copia el token completo (incluyendo "Bearer ")');
@@ -135,13 +151,8 @@ const generateTestToken = async () => {
         console.log('   3. Pega el token y haz clic en "Authorize"');
         console.log('   4. ¡Ya puedes probar los endpoints protegidos!');
         console.log();
-          if (!testUser && realUsers.length === 0) {
-            console.log('⚠️ ADVERTENCIA: Usuario ficticio detectado');
-            console.log('   Algunos endpoints pueden fallar si buscan al usuario en la DB');
-            console.log('   Para testing completo, crea un usuario de pruebas:');
-            console.log('   npm run test:user');
-            console.log();
-        } else if (!testUser) {
+        
+        if (!testUser) {
             console.log('💡 RECOMENDACIÓN: Crea un usuario específico para pruebas');
             console.log('   npm run test:user');
             console.log('   Esto evitará interferir con datos de usuarios reales');

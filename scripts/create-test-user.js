@@ -83,7 +83,7 @@ const createTestUser = async () => {
             console.log('✅ Usuario de prueba creado exitosamente:');
             console.log(`   👤 Nombre: ${testUser.name} ${testUser.lastName}`);
             console.log(`   📧 Email: ${testUser.email}`);
-            console.log(`   🆔 ID: ${testUser._id}`);
+            console.log(`   🆔 ID: ${testUser.id}`);
             console.log(`   🔐 Contraseña: ${TEST_USER.password}`);
         }
 
@@ -91,7 +91,7 @@ const createTestUser = async () => {
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('📋 Datos para testing:');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log(`Usuario ID: ${testUser._id}`);
+        console.log(`Usuario ID: ${testUser.id}`);
         console.log(`Email: ${TEST_USER.email}`);
         console.log(`Contraseña: ${TEST_USER.password}`);
         console.log();
