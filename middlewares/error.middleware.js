@@ -1,35 +1,40 @@
 const errorMiddleware = (err, req, res, next) => {
+  console.error("🔴 Error capturado:", err);
 
-    try {
-        let statusCode = err.statusCode || 500; // Default to 500 if no status code is set
-        let message = err.message || 'Internal Server Error'; // Default message
+  let statusCode = err.statusCode || 500;
+  let message = err.message || "Error interno del servidor";
 
-        console.error({statusCode,message}); // Log the error for debugging
+  // ❌ Error por ID inválido (ObjectId mal formado en MongoDB)
+  if (err.name === "CastError") {
+    message = "ID de recurso no válido o inexistente.";
+    statusCode = 400;
+  }
 
-        // Moongoose bad ObjectId error: ID no válido
-        if(err.name === 'CastError') {
-            message = `Recurso no válido: el ID es incorrecto o no existe.`;
-            statusCode = 404; // Not Found
-        }
+  // 🚫 Error por clave única duplicada (como email, username, etc.)
+  if (err.code === 11000) {
+    // ❗ Seguridad: NO revelamos el campo duplicado
+    message = "Ya existe un registro con los datos ingresados.";
+    statusCode = 409;
+  }
 
-        // Moongoose duplicate key error
-        if(err.code === 11000) {
-            message = `Duplicate field value entered`;
-            statusCode = 409; // Conflict
-        }
+  // ⚠️ Error de validación (campos requeridos, formato incorrecto, etc.)
+  if (err.name === "ValidationError") {
+    const errores = Object.values(err.errors).map(val => val.message);
+    message = errores.join(", ");
+    statusCode = 400;
+  }
 
-        // Moongoose validation error: errores de validación
-        if(err.name === 'ValidationError') {
-            message = Object.values(err.errors).map(val => val.message).join(', ');
-            statusCode = 400; // Bad Request
-        }
+  // 🔐 Otras excepciones comunes que podrías manejar después:
+  // if (err.name === "JsonWebTokenError") { ... }
+  // if (err.name === "TokenExpiredError") { ... }
 
-        res.status(statusCode).json({ success: false, message });
+  res.status(statusCode).json({
+    success: false,
+    error: {
+      message,
+      statusCode
     }
-    catch (error) {
-        next(error); // Pass the error to the next middleware
-    }
-
-}
+  });
+};
 
 export default errorMiddleware;
