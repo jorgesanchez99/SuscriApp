@@ -6,7 +6,8 @@
  */
 
 import mongoose from 'mongoose';
-import bcryptjs from 'bcryptjs';
+import AuthService from '../services/auth.service.js';
+import UserService from '../services/user.service.js';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -38,26 +39,11 @@ const createTestUser = async () => {
         if (!mongoUri) {
             console.error('❌ No se encontró URI de MongoDB en las variables de entorno');
             process.exit(1);
-        }
-
-        await mongoose.connect(mongoUri);
+        }        await mongoose.connect(mongoUri);
         console.log('✅ Conectado a MongoDB');
 
-        // Definir esquema de usuario
-        const userSchema = new mongoose.Schema({
-            name: { type: String, required: true },
-            lastName: { type: String, required: true },
-            email: { type: String, required: true, unique: true },
-            password: { type: String, required: true }
-        }, { 
-            collection: 'users',
-            timestamps: true
-        });
-
-        const User = mongoose.model('User', userSchema);
-
         // Verificar si el usuario de prueba ya existe
-        let testUser = await User.findOne({ email: TEST_USER.email });
+        let testUser = await UserService.getUserByEmail(TEST_USER.email);
 
         if (testUser) {
             console.log('🔍 Usuario de prueba ya existe:');
@@ -70,28 +56,21 @@ const createTestUser = async () => {
         } else {
             console.log('🔨 Creando usuario de prueba...');
             
-            // Encriptar contraseña
-            const saltRounds = 10;
-            const hashedPassword = await bcryptjs.hash(TEST_USER.password, saltRounds);
-
-            // Crear usuario
-            testUser = await User.create({
-                ...TEST_USER,
-                password: hashedPassword
-            });
+            // Crear usuario usando AuthService (que maneja el hash automáticamente)
+            const result = await AuthService.signUp(TEST_USER);
+            testUser = result.user;
 
             console.log('✅ Usuario de prueba creado exitosamente:');
             console.log(`   👤 Nombre: ${testUser.name} ${testUser.lastName}`);
             console.log(`   📧 Email: ${testUser.email}`);
-            console.log(`   🆔 ID: ${testUser.id}`);
+            console.log(`   🆔 ID: ${testUser._id}`);
             console.log(`   🔐 Contraseña: ${TEST_USER.password}`);
         }
 
-        console.log();
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log();        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('📋 Datos para testing:');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log(`Usuario ID: ${testUser.id}`);
+        console.log(`Usuario ID: ${testUser._id}`);
         console.log(`Email: ${TEST_USER.email}`);
         console.log(`Contraseña: ${TEST_USER.password}`);
         console.log();
