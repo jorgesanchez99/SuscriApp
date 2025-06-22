@@ -9,15 +9,25 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 // Cargar variables de entorno
-dotenv.config();
+// Priorizar archivos de desarrollo local
+dotenv.config({ path: '.env.development.local' });
+dotenv.config({ path: '.env.local' });
+dotenv.config({ path: '.env' });
 
 const testDatabaseConnection = async () => {
     try {
         console.log('🔍 Verificando conexión a MongoDB...');
-        console.log(`📡 URI: ${process.env.DB_URI?.replace(/\/\/[^:]+:[^@]+@/, '//***:***@') || 'No configurada'}`);
+        
+        // Buscar la URI en diferentes variables de entorno
+        const mongoUri = process.env.MONGODB_URI || process.env.DB_URI;
+        console.log(`📡 URI: ${mongoUri?.replace(/\/\/[^:]+:[^@]+@/, '//***:***@') || 'No configurada'}`);
+        
+        if (!mongoUri) {
+            throw new Error('No se encontró la URI de MongoDB. Verifica tu archivo .env y que contenga DB_URI o MONGODB_URI');
+        }
         
         // Configuración de conexión con timeouts más cortos para testing
-        const connection = await mongoose.connect(process.env.MONGODB_URI, {
+        const connection = await mongoose.connect(mongoUri, {
             serverSelectionTimeoutMS: 5000, // 5 segundos
             connectTimeoutMS: 10000, // 10 segundos
         });
