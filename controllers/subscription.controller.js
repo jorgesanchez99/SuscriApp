@@ -169,3 +169,39 @@ export const getUserSubscriptionStats = async (req, res, next) => {
         next(error);
     }
 }
+
+export const searchSubscriptions = async (req, res, next) => {
+    try {
+        const { q: searchTerm, page, limit } = req.query;
+        const userId = req.user._id;
+        
+        if (!searchTerm || searchTerm.trim().length < 2) {
+            return res.status(400).json({
+                success: false,
+                error: {
+                    message: "El término de búsqueda debe tener al menos 2 caracteres",
+                    statusCode: 400
+                }
+            });
+        }
+
+        const options = {
+            page: parseInt(page) || 1,
+            limit: parseInt(limit) || 10
+        };
+
+        const subscriptions = await SubscriptionService.searchSubscriptions(
+            searchTerm.trim(), 
+            userId, 
+            options
+        );
+
+        res.status(200).json({
+            success: true,
+            data: subscriptions,
+            searchTerm: searchTerm.trim()
+        });
+    } catch (error) {
+        next(error);
+    }
+}

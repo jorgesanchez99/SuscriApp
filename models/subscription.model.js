@@ -87,7 +87,7 @@ subscriptionSchema.pre('save', function (next) {
 
     // Si la fecha de renovación ya pasó, marca la suscripción como expirada
     if(this.renewalDate < new Date()){
-        this.status = 'expired';
+        this.status = 'expirada';
     }
 
     // Continúa con el proceso de guardado
