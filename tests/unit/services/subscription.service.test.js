@@ -50,7 +50,7 @@ describe('SubscriptionService - Real Unit Tests', () => {
       const subscriptionData = {
         name: 'Netflix',
         cost: 9.99,
-        frequency: 'monthly',
+        frequency: 'mensual',
         category: 'entertainment'
       };
       const userId = '507f1f77bcf86cd799439011';
@@ -81,7 +81,7 @@ describe('SubscriptionService - Real Unit Tests', () => {
       const subscriptionData = {
         name: 'Netflix',
         cost: 9.99,
-        frequency: 'monthly'
+        frequency: 'mensual'
       };
       const userId = '507f1f77bcf86cd799439011';
 

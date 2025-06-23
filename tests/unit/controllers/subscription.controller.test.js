@@ -101,7 +101,7 @@ describe('Subscription Controller', () => {
                 limit: '5',
                 status: 'active',
                 category: 'entertainment',
-                frequency: 'monthly'
+                frequency: 'mensual'
             };
 
             const mockResult = {
@@ -118,7 +118,7 @@ describe('Subscription Controller', () => {
                 limit: 5,
                 status: 'active',
                 category: 'entertainment',
-                frequency: 'monthly'
+                frequency: 'mensual'
             });
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({

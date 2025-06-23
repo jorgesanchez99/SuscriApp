@@ -21,7 +21,7 @@ const subscriptionSchema = new mongoose.Schema({
     currency: {
         type: String,
         required: [true, 'La moneda es obligatoria'],
-        enum: ['USD', 'EUR', 'PEN'], // Puedes agregar más monedas según sea necesario
+        enum: ['USD', 'EUR', 'MXN', 'ARS', 'COP', 'PEN', 'CLP'],
         default: 'PEN',
     },
     frequency: {

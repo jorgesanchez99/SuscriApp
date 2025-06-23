@@ -162,7 +162,7 @@ Los errores se retornan con el formato:
                         },
                         frequency: {
                             type: 'string',
-                            enum: ['mensual', 'trimestral', 'semestral', 'anual'],
+                            enum: ['diaria', 'semanal', 'mensual', 'anual'],
                             description: 'Frecuencia de cobro',
                             example: 'mensual'
                         },
@@ -174,7 +174,7 @@ Los errores se retornan con el formato:
                         },
                         status: {
                             type: 'string',
-                            enum: ['activa', 'cancelada', 'pausada', 'expirada'],
+                            enum: ['activa', 'cancelada', 'pendiente', 'expirada'],
                             description: 'Estado actual de la suscripción',
                             example: 'activa'
                         },

@@ -65,7 +65,7 @@ export const createSubscriptionValidators = [    body('name')
 
     body('status')
         .optional()
-        .isIn(['activa', 'cancelada', 'pausada', 'expirada'])
+        .isIn(['activa', 'cancelada', 'pendiente', 'expirada'])
         .withMessage('Estado no válido'),
 
     body('website')
@@ -152,7 +152,7 @@ export const updateSubscriptionValidators = [
 
     body('status')
         .optional()
-        .isIn(['activa', 'cancelada', 'pausada', 'expirada'])
+        .isIn(['activa', 'cancelada', 'pendiente', 'expirada'])
         .withMessage('Estado no válido'),
 
     body('website')
@@ -201,7 +201,7 @@ export const queryValidators = [
 
     query('status')
         .optional()
-        .isIn(['activa', 'cancelada', 'pausada', 'expirada'])
+        .isIn(['activa', 'cancelada', 'pendiente', 'expirada'])
         .withMessage('Estado no válido'),
 
     query('category')
