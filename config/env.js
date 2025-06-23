@@ -2,17 +2,18 @@ import {config} from "dotenv";
 
 // Load environment variables from the .env file based on the NODE_ENV
 // If NODE_ENV is not set, it defaults to "development.local"
-config({path: `.env.${process.env.NODE_ENV || 'development'}.local`});
+const envFile = `.env.${process.env.NODE_ENV || 'development'}.local`;
+config({path: envFile});
 
 // Validate required environment variables
 const requiredEnvVars = ['DB_URI', 'JWT_SECRET', 'ARCJET_KEY'];
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+    throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}. Make sure ${envFile} exists and contains all required variables.`);
 }
 
-// Validate JWT_SECRET strength
+// Validate JWT_SECRET strength (only if it exists and is loaded)
 if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 64) {
     throw new Error('JWT_SECRET must be at least 64 characters long for security');
 }

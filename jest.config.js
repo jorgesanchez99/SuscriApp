@@ -2,6 +2,11 @@ export default {
   // Entorno de testing
   testEnvironment: 'node',
   
+  // Usar babel-jest para transformar archivos
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+  
   // Archivos de configuración que se ejecutan antes de las pruebas
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
   
@@ -17,13 +22,10 @@ export default {
     '/dist/',
     '/.OLD/'
   ],
-    // Soporte para módulos ES6
-  transform: {},
-  // extensionsToTreatAsEsm: ['.js'], // Removido porque se infiere automáticamente
-  globals: {
-    'ts-jest': {
-      useESM: true
-    }
+  
+  // Mapeo de módulos para resolver imports relativos
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   
   // Cobertura de código
