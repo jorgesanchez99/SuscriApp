@@ -47,21 +47,26 @@ export const createSubscriptionValidators = [    body('name')
         .withMessage('Categoría no válida'),
 
     body('startDate')
+        .trim()                                  // 1) quita espacios al inicio/fin
+        .notEmpty()                              // 2) verifica que no esté vacío
+        .withMessage('Fecha de inicio es obligatoria')
         .isISO8601()
         .withMessage('Fecha de inicio debe ser una fecha válida'),
 
     body('renewalDate')
+        .trim()                                  // 1) quita espacios al inicio/fin
+        .optional({ checkFalsy: true })          // 2) si queda "", null o undefined, ignora el resto
         .isISO8601()
-        .withMessage('Fecha de renovación debe ser una fecha válida')
+            .withMessage('Fecha de renovación debe ser una fecha válida')
         .custom((value, { req }) => {
-            const startDate = new Date(req.body.startDate);
+            const startDate   = new Date(req.body.startDate);
             const renewalDate = new Date(value);
-            
             if (renewalDate <= startDate) {
-                throw new Error('La fecha de renovación debe ser posterior a la fecha de inicio');
+            throw new Error('La fecha de renovación debe ser posterior a la fecha de inicio');
             }
             return true;
         }),
+
 
     body('status')
         .optional()
