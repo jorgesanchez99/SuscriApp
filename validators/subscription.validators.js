@@ -38,7 +38,7 @@ export const createSubscriptionValidators = [    body('name')
         .withMessage('Moneda no válida'),
 
     body('frequency')
-        .isIn(['mensual', 'trimestral', 'semestral', 'anual'])
+        .isIn(['diaria', 'semanal', 'mensual', 'anual'])
         .withMessage('Frecuencia no válida'),
 
     body('category')
@@ -121,7 +121,7 @@ export const updateSubscriptionValidators = [
 
     body('frequency')
         .optional()
-        .isIn(['mensual', 'trimestral', 'semestral', 'anual'])
+        .isIn(['diaria', 'semanal', 'mensual', 'anual'])
         .withMessage('Frecuencia no válida'),
 
     body('category')
@@ -211,7 +211,7 @@ export const queryValidators = [
 
     query('frequency')
         .optional()
-        .isIn(['mensual', 'trimestral', 'semestral', 'anual'])
+        .isIn(['diaria', 'semanal', 'mensual', 'anual'])
         .withMessage('Frecuencia no válida'),
 
     query('days')

@@ -2,8 +2,7 @@ import { validationResult } from 'express-validator';
 import {
   createSubscriptionValidators,
   updateSubscriptionValidators,
-  subscriptionIdValidator,
-  getSubscriptionsQueryValidators
+  subscriptionIdValidator
 } from '../../../validators/subscription.validators.js';
 
 /**
