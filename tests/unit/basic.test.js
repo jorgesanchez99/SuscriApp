@@ -5,10 +5,9 @@ describe('Basic Test Suite', () => {
   test('should verify Jest is working', () => {
     expect(true).toBe(true);
   });
-
   test('should verify environment variables', () => {
     expect(process.env.NODE_ENV).toBe('test');
-    expect(process.env.JWT_SECRET).toBe('test-jwt-secret-key-for-testing-only');
+    expect(process.env.JWT_SECRET).toBe('5fe762ca518800d7b49aefedba4f26f340c7f535d331601ef542da8d5d4481763768347c725d6194fb325521e9fe4eb83ebd849000ef5510395cc1b0d9025acd');
   });
 
   test('should perform basic math operations', () => {
