@@ -220,7 +220,7 @@ const userRouter = Router();
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 
-userRouter.get('/', getAllUsers);
+userRouter.get('/',authorized, getAllUsers);
 userRouter.get('/:id', authorized, getUserById);
 userRouter.put('/:id', authorized, updateUser);
 userRouter.delete('/:id', authorized, deleteUser);

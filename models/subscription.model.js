@@ -58,6 +58,10 @@ const subscriptionSchema = new mongoose.Schema({
         type: Date,
         validate: {
             validator: function(value) {
+                // Solo validar si el valor existe y es una fecha válida
+                if (!value || isNaN(Date.parse(value))) {
+                    return true; // Dejar que el middleware calcule automáticamente
+                }
                 return value > this.startDate;
             },
             message: 'La fecha de renovación debe ser futura',
