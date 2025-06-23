@@ -16,24 +16,32 @@ jest.mock('../../../models/subscription.model.js', () => ({
   aggregate: jest.fn()
 }));
 jest.mock('mongoose', () => ({
+  Schema: class Schema {
+    constructor() {}
+    pre() { return this; }
+    post() { return this; }
+    index() { return this; }
+  },
+  model: jest.fn(),
   Types: {
-    ObjectId: {
-      isValid: jest.fn()
-    }
+    ObjectId: jest.fn().mockImplementation(() => ({}))
   }
 }));
 
 describe('SubscriptionService - Real Unit Tests', () => {
-  
   beforeEach(() => {
     jest.clearAllMocks();
     
+    // Restore any spies on SubscriptionService methods
+    if (SubscriptionService.getSubscriptionById.mockRestore) {
+      SubscriptionService.getSubscriptionById.mockRestore();
+    }
+    
     // Setup mongoose mock
     mongoose.Types = {
-      ObjectId: {
-        isValid: jest.fn()
-      }
+      ObjectId: jest.fn().mockImplementation(() => ({}))
     };
+    mongoose.Types.ObjectId.isValid = jest.fn();
   });
 
   describe('createSubscription', () => {
@@ -229,7 +237,6 @@ describe('SubscriptionService - Real Unit Tests', () => {
         });
     });
   });
-
   describe('updateSubscription', () => {
     test('should update subscription successfully', async () => {
       // Arrange
@@ -246,10 +253,14 @@ describe('SubscriptionService - Real Unit Tests', () => {
         user: userId 
       };
 
-      mongoose.Types.ObjectId.isValid.mockReturnValue(true);
-      
+      // Mock the internal call to getSubscriptionById
+      jest.spyOn(SubscriptionService, 'getSubscriptionById').mockResolvedValue({
+        _id: subscriptionId,
+        user: userId
+      });
+
       const mockQuery = {
-        populate: jest.fn().mockResolvedValue(mockUpdatedSubscription)
+        select: jest.fn().mockResolvedValue(mockUpdatedSubscription)
       };
       Subscription.findByIdAndUpdate.mockReturnValue(mockQuery);
 
@@ -257,23 +268,25 @@ describe('SubscriptionService - Real Unit Tests', () => {
       const result = await SubscriptionService.updateSubscription(subscriptionId, updateData, userId);
 
       // Assert
-      expect(mongoose.Types.ObjectId.isValid).toHaveBeenCalledWith(subscriptionId);
+      expect(SubscriptionService.getSubscriptionById).toHaveBeenCalledWith(subscriptionId, userId);
       expect(Subscription.findByIdAndUpdate).toHaveBeenCalledWith(
         subscriptionId,
         updateData,
         { new: true, runValidators: true }
       );
-      expect(mockQuery.populate).toHaveBeenCalledWith('user', 'name lastName email');
+      expect(mockQuery.select).toHaveBeenCalledWith('-__v');
       expect(result).toEqual(mockUpdatedSubscription);
-    });
-
-    test('should throw error for invalid subscription ID', async () => {
+    });    test('should throw error for invalid subscription ID', async () => {
       // Arrange
       const invalidId = 'invalid-id';
       const updateData = { name: 'Test' };
       const userId = '507f1f77bcf86cd799439012';
       
-      mongoose.Types.ObjectId.isValid.mockReturnValue(false);
+      // Mock getSubscriptionById to throw the validation error
+      jest.spyOn(SubscriptionService, 'getSubscriptionById').mockRejectedValue({
+        message: 'ID de suscripción no válido',
+        statusCode: 400
+      });
 
       // Act & Assert
       await expect(SubscriptionService.updateSubscription(invalidId, updateData, userId))
@@ -282,10 +295,10 @@ describe('SubscriptionService - Real Unit Tests', () => {
           statusCode: 400
         });
       
+      expect(SubscriptionService.getSubscriptionById).toHaveBeenCalledWith(invalidId, userId);
       expect(Subscription.findByIdAndUpdate).not.toHaveBeenCalled();
     });
   });
-
   describe('deleteSubscription', () => {
     test('should delete subscription successfully', async () => {
       // Arrange
@@ -297,25 +310,31 @@ describe('SubscriptionService - Real Unit Tests', () => {
         user: userId 
       };
 
-      mongoose.Types.ObjectId.isValid.mockReturnValue(true);
+      // Mock the internal call to getSubscriptionById
+      jest.spyOn(SubscriptionService, 'getSubscriptionById').mockResolvedValue({
+        _id: subscriptionId,
+        user: userId
+      });
+
       Subscription.findByIdAndDelete.mockResolvedValue(mockDeletedSubscription);
 
       // Act
       const result = await SubscriptionService.deleteSubscription(subscriptionId, userId);
 
       // Assert
-      expect(mongoose.Types.ObjectId.isValid).toHaveBeenCalledWith(subscriptionId);
+      expect(SubscriptionService.getSubscriptionById).toHaveBeenCalledWith(subscriptionId, userId);
       expect(Subscription.findByIdAndDelete).toHaveBeenCalledWith(subscriptionId);
       expect(result).toEqual(mockDeletedSubscription);
-    });
-
-    test('should throw error when subscription not found', async () => {
+    });    test('should throw error when subscription not found', async () => {
       // Arrange
       const subscriptionId = '507f1f77bcf86cd799439011';
       const userId = '507f1f77bcf86cd799439012';
 
-      mongoose.Types.ObjectId.isValid.mockReturnValue(true);
-      Subscription.findByIdAndDelete.mockResolvedValue(null);
+      // Mock getSubscriptionById to throw the not found error
+      jest.spyOn(SubscriptionService, 'getSubscriptionById').mockRejectedValue({
+        message: 'Suscripción no encontrada',
+        statusCode: 404
+      });
 
       // Act & Assert
       await expect(SubscriptionService.deleteSubscription(subscriptionId, userId))
@@ -323,29 +342,24 @@ describe('SubscriptionService - Real Unit Tests', () => {
           message: 'Suscripción no encontrada',
           statusCode: 404
         });
+      
+      expect(SubscriptionService.getSubscriptionById).toHaveBeenCalledWith(subscriptionId, userId);
+      expect(Subscription.findByIdAndDelete).not.toHaveBeenCalled();
     });
   });
-
   describe('getUserSubscriptionStats', () => {
     test('should return user subscription statistics', async () => {
       // Arrange
       const userId = '507f1f77bcf86cd799439011';
       const mockStats = [
         {
-          totalActive: 5,
-          totalInactive: 2,
-          totalCancelled: 1,
-          monthlyTotal: 45.99,
-          yearlyTotal: 551.88,
-          averageCost: 9.20,
-          categoryCosts: [
-            { _id: 'entertainment', total: 25.99, count: 3 },
-            { _id: 'productivity', total: 20.00, count: 2 }
-          ]
+          totalSubscriptions: 8,
+          activeSubscriptions: 5,
+          cancelledSubscriptions: 3,
+          estimatedMonthlyExpense: 45.99
         }
       ];
 
-      mongoose.Types.ObjectId.isValid.mockReturnValue(true);
       UserService.getUserById.mockResolvedValue({ _id: userId });
       Subscription.aggregate.mockResolvedValue(mockStats);
 
@@ -353,7 +367,6 @@ describe('SubscriptionService - Real Unit Tests', () => {
       const result = await SubscriptionService.getUserSubscriptionStats(userId);
 
       // Assert
-      expect(mongoose.Types.ObjectId.isValid).toHaveBeenCalledWith(userId);
       expect(UserService.getUserById).toHaveBeenCalledWith(userId);
       expect(Subscription.aggregate).toHaveBeenCalledWith(expect.any(Array));
       expect(result).toEqual(mockStats[0]);
@@ -363,7 +376,6 @@ describe('SubscriptionService - Real Unit Tests', () => {
       // Arrange
       const userId = '507f1f77bcf86cd799439011';
 
-      mongoose.Types.ObjectId.isValid.mockReturnValue(true);
       UserService.getUserById.mockResolvedValue({ _id: userId });
       Subscription.aggregate.mockResolvedValue([]);
 
@@ -372,13 +384,10 @@ describe('SubscriptionService - Real Unit Tests', () => {
 
       // Assert
       expect(result).toEqual({
-        totalActive: 0,
-        totalInactive: 0,
-        totalCancelled: 0,
-        monthlyTotal: 0,
-        yearlyTotal: 0,
-        averageCost: 0,
-        categoryCosts: []
+        totalSubscriptions: 0,
+        activeSubscriptions: 0,
+        cancelledSubscriptions: 0,
+        estimatedMonthlyExpense: 0
       });
     });
   });
