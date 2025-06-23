@@ -188,8 +188,8 @@ tests/
 │   │   └── auth.service.test.js
 │   └── validators/            # Tests de validadores
 │       └── subscription.validators.test.js
-├── integration/               # Tests de integración (pendiente)
-└── e2e/                      # Tests end-to-end (pendiente)
+├── integration/               # Tests de integración (no implementado)
+└── e2e/                      # Tests end-to-end (no implementado)
 ```
 
 ### 🛠️ Scripts de Testing
@@ -206,8 +206,8 @@ tests/
 - **Bot Detection**: Detección y bloqueo automático de bots maliciosos
 - **Validación de datos**: Validación exhaustiva con express-validator
 - **Hash de contraseñas**: Encriptación segura con bcryptjs
-- **CORS configurado**: Protección contra ataques cross-origin
-- **Headers de seguridad**: Configuración de headers HTTP seguros
+- **CORS**: Preparado pero no activado (comentado en código)
+- **Logging**: Middleware implementado pero no activado
 
 ### ✅ Validaciones Implementadas
 - **Email único**: Prevención de registros duplicados
@@ -256,7 +256,7 @@ tests/
 │   ├── auth.middleware.js     #   Autenticación JWT
 │   ├── arcjet.middleware.js   #   Seguridad Arcjet
 │   ├── error.middleware.js    #   Manejo de errores
-│   ├── logger.middleware.js   #   Logging de requests
+│   ├── logger.middleware.js   #   Logging de requests (implementado, no activo)
 │   └── validation.middleware.js # Validación de datos
 ├── 
 ├── models/                    # 📋 Modelos de datos
@@ -336,9 +336,21 @@ tests/
 - **Autenticación JWT** con registro y login
 - **Gestión de suscripciones** con CRUD completo
 - **Documentación Swagger** interactiva
-- **Sistema de seguridad** con Arcjet
-- **Testing unitario** configurado
+- **Sistema de seguridad** con Arcjet (rate limiting, bot detection)
+- **Testing unitario** básico configurado
 - **Scripts de desarrollo** y utilidades
+- **Validación de datos** robusta con express-validator
+- **Manejo centralizado de errores**
+
+### 🚧 Implementado pero No Activo
+- **Middleware de logging** (implementado pero comentado)
+- **CORS** (preparado pero no activado)
+- **Archivos estáticos** (configurado pero comentado)
+
+### 🚀 Por Implementar
+- **Headers de seguridad** (helmet)
+- **Tests de integración** y end-to-end
+- **Variables de entorno** (.env.example files)
 
 ### 🚀 Próximas Mejoras
 - **Dashboard web** (frontend)

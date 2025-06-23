@@ -2,7 +2,10 @@ import { validationResult } from 'express-validator';
 import {
   createSubscriptionValidators,
   updateSubscriptionValidators,
-  subscriptionIdValidator
+  subscriptionIdValidator,
+  userIdValidator,
+  queryValidators,
+  searchValidators
 } from '../../../validators/subscription.validators.js';
 
 /**
@@ -107,6 +110,31 @@ describe('Subscription Validators - Real Unit Tests', () => {
       );
     });
 
+    test('should reject subscription with price having more than 2 decimals', async () => {
+      const invalidData = {
+        body: {
+          name: 'Netflix Premium',
+          price: 15.999, // Más de 2 decimales
+          currency: 'USD',
+          frequency: 'mensual',
+          startDate: '2024-01-01',
+          renewalDate: '2024-02-01'
+        }
+      };
+
+      const result = await validateRequest(createSubscriptionValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'price',
+            msg: 'El precio no puede tener más de 2 decimales'
+          })
+        ])
+      );
+    });
+
     test('should reject subscription with invalid currency', async () => {
       const invalidData = {
         body: {
@@ -156,6 +184,56 @@ describe('Subscription Validators - Real Unit Tests', () => {
         ])
       );
     });
+
+    test('should reject subscription when renewalDate is before startDate', async () => {
+      const invalidData = {
+        body: {
+          name: 'Netflix Premium',
+          price: 15.99,
+          currency: 'USD',
+          frequency: 'mensual',
+          startDate: '2024-02-01',
+          renewalDate: '2024-01-01' // Fecha anterior a startDate
+        }
+      };
+
+      const result = await validateRequest(createSubscriptionValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'renewalDate',
+            msg: 'La fecha de renovación debe ser posterior a la fecha de inicio'
+          })
+        ])
+      );
+    });
+
+    test('should reject subscription when renewalDate equals startDate', async () => {
+      const invalidData = {
+        body: {
+          name: 'Netflix Premium',
+          price: 15.99,
+          currency: 'USD',
+          frequency: 'mensual',
+          startDate: '2024-01-01',
+          renewalDate: '2024-01-01' // Misma fecha
+        }
+      };
+
+      const result = await validateRequest(createSubscriptionValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'renewalDate',
+            msg: 'La fecha de renovación debe ser posterior a la fecha de inicio'
+          })
+        ])
+      );
+    });
   });
 
   describe('subscriptionIdValidator', () => {
@@ -187,6 +265,275 @@ describe('Subscription Validators - Real Unit Tests', () => {
           expect.objectContaining({
             path: 'id',
             msg: 'ID de suscripción no válido'
+          })
+        ])
+      );
+    });
+  });
+
+  describe('updateSubscriptionValidators', () => {
+    test('should validate partial update data', async () => {
+      const validData = {
+        params: {
+          id: '507f1f77bcf86cd799439011'
+        },
+        body: {
+          name: 'Netflix Updated',
+          price: 19.99
+        }
+      };
+
+      const result = await validateRequest(updateSubscriptionValidators, validData);
+      
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should reject invalid ObjectId in params', async () => {
+      const invalidData = {
+        params: {
+          id: 'invalid-id'
+        },
+        body: {
+          name: 'Netflix Updated'
+        }
+      };
+
+      const result = await validateRequest(updateSubscriptionValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'id',
+            msg: 'ID de suscripción no válido'
+          })
+        ])
+      );
+    });
+
+    test('should handle empty body (all fields optional)', async () => {
+      const validData = {
+        params: {
+          id: '507f1f77bcf86cd799439011'
+        },
+        body: {}
+      };
+
+      const result = await validateRequest(updateSubscriptionValidators, validData);
+      
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should reject update with price having more than 2 decimals', async () => {
+      const invalidData = {
+        params: {
+          id: '507f1f77bcf86cd799439011'
+        },
+        body: {
+          price: 19.999 // Más de 2 decimales
+        }
+      };
+
+      const result = await validateRequest(updateSubscriptionValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'price',
+            msg: 'El precio no puede tener más de 2 decimales'
+          })
+        ])
+      );
+    });
+
+    test('should reject update when renewalDate is before startDate', async () => {
+      const invalidData = {
+        params: {
+          id: '507f1f77bcf86cd799439011'
+        },
+        body: {
+          startDate: '2024-02-01',
+          renewalDate: '2024-01-01' // Fecha anterior a startDate
+        }
+      };
+
+      const result = await validateRequest(updateSubscriptionValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'renewalDate',
+            msg: 'La fecha de renovación debe ser posterior a la fecha de inicio'
+          })
+        ])
+      );
+    });
+
+    test('should allow update with only renewalDate when no startDate provided', async () => {
+      const validData = {
+        params: {
+          id: '507f1f77bcf86cd799439011'
+        },
+        body: {
+          renewalDate: '2024-03-01' // Solo renewalDate, sin startDate
+        }
+      };
+
+      const result = await validateRequest(updateSubscriptionValidators, validData);
+      
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
+  describe('userIdValidator', () => {
+    test('should validate valid user ObjectId', async () => {
+      const validData = {
+        params: {
+          id: '507f1f77bcf86cd799439011'
+        }
+      };
+
+      const result = await validateRequest(userIdValidator, validData);
+      
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should reject invalid user ObjectId', async () => {
+      const invalidData = {
+        params: {
+          id: 'not-valid-objectid'
+        }
+      };
+
+      const result = await validateRequest(userIdValidator, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'id',
+            msg: 'ID de usuario no válido'
+          })
+        ])
+      );
+    });
+  });
+
+  describe('queryValidators', () => {
+    test('should validate valid query parameters', async () => {
+      const validData = {
+        query: {
+          page: '2',
+          limit: '20',
+          status: 'activa',
+          category: 'streaming'
+        }
+      };
+
+      const result = await validateRequest(queryValidators, validData);
+      
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should reject invalid page parameter', async () => {
+      const invalidData = {
+        query: {
+          page: '0'
+        }
+      };
+
+      const result = await validateRequest(queryValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'page',
+            msg: 'La página debe ser un número entero mayor a 0'
+          })
+        ])
+      );
+    });
+
+    test('should reject invalid limit parameter', async () => {
+      const invalidData = {
+        query: {
+          limit: '150'
+        }
+      };
+
+      const result = await validateRequest(queryValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'limit',
+            msg: 'El límite debe ser un número entre 1 y 100'
+          })
+        ])
+      );
+    });
+  });
+
+  describe('searchValidators', () => {
+    test('should validate valid search query', async () => {
+      const validData = {
+        query: {
+          q: 'Netflix',
+          page: '1',
+          limit: '10'
+        }
+      };
+
+      const result = await validateRequest(searchValidators, validData);
+      
+      expect(result.isValid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    test('should reject search term too short', async () => {
+      const invalidData = {
+        query: {
+          q: 'N'
+        }
+      };
+
+      const result = await validateRequest(searchValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'q',
+            msg: 'El término de búsqueda debe tener entre 2 y 100 caracteres'
+          })
+        ])
+      );
+    });
+
+    test('should reject search term with invalid characters', async () => {
+      const invalidData = {
+        query: {
+          q: 'Netflix<script>'
+        }
+      };
+
+      const result = await validateRequest(searchValidators, invalidData);
+      
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: 'q',
+            msg: 'El término de búsqueda contiene caracteres no válidos'
           })
         ])
       );
