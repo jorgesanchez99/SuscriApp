@@ -6,7 +6,7 @@ import subscriptionRouter from "./routes/subscription.routes.js";
 import connectToDatabase from "./database/mongodb.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import cookieParser from "cookie-parser";
-import arjectMiddleware from "./middlewares/arject.middleware.js";
+import arcjetMiddleware from "./middlewares/arcjet.middleware.js";
 
 // Swagger imports
 import swaggerUi from 'swagger-ui-express';
@@ -27,7 +27,7 @@ app.use(cookieParser());
 // import path from "path";
 // app.use(express.static(path.join(process.cwd(), "public")));
 
-app.use(arjectMiddleware);
+app.use(arcjetMiddleware);
 
 // Configuración de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {

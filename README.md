@@ -241,7 +241,7 @@ tests/
 ├── 
 ├── config/                     # ⚙️ Configuraciones
 │   ├── env.js                 #   Variables de entorno
-│   ├── arject.js              #   Configuración de Arcjet
+│   ├── arcjet.js              #   Configuración de Arcjet
 │   └── swagger.js             #   Configuración de Swagger
 ├── 
 ├── controllers/               # 🎮 Controladores HTTP
@@ -254,7 +254,7 @@ tests/
 ├── 
 ├── middlewares/               # 🔗 Middlewares
 │   ├── auth.middleware.js     #   Autenticación JWT
-│   ├── arject.middleware.js   #   Seguridad Arcjet
+│   ├── arcjet.middleware.js   #   Seguridad Arcjet
 │   ├── error.middleware.js    #   Manejo de errores
 │   ├── logger.middleware.js   #   Logging de requests
 │   └── validation.middleware.js # Validación de datos

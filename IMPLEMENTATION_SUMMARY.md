@@ -53,7 +53,7 @@ SuscripcionTracker/
 ├── 📁 config/
 │   ├── swagger.js          # Configuración Swagger/OpenAPI
 │   ├── env.js              # Variables de entorno
-│   └── arject.js           # Configuración Arcjet
+│   └── arcjet.js           # Configuración Arcjet
 ├── 📁 controllers/         # Lógica de controladores
 ├── 📁 database/           # Conexión MongoDB
 ├── 📁 middlewares/        # Middlewares personalizados

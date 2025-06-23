@@ -1,7 +1,7 @@
-import aj from "../config/arject.js";
+import aj from "../config/arcjet.js";
 
 
-const arjectMiddleware = async (req, res, next) => {
+const arcjetMiddleware = async (req, res, next) => {
 
     try {
         const decision = await aj.protect(req, { requested: 1});
@@ -14,9 +14,9 @@ const arjectMiddleware = async (req, res, next) => {
 
         next();
     } catch (error) {
-        console.log(`Error in arjectMiddleware: ${error.message}`);
+        console.log(`Error in arcjetMiddleware: ${error.message}`);
         next(error);
     }
 }
 
-export default arjectMiddleware;
+export default arcjetMiddleware;
