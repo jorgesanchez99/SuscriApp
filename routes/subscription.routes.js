@@ -173,11 +173,11 @@ const subscriptionRouter = Router();
  *               startDate:
  *                 type: string
  *                 format: date
- *                 example: "2024-01-01"
+ *                 example: "2025-06-23"
  *               renewalDate:
  *                 type: string
  *                 format: date
- *                 example: "2024-02-01"
+ *                 example: "2025-07-23"
  *               website:
  *                 type: string
  *                 format: uri

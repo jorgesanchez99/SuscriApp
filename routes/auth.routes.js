@@ -41,7 +41,7 @@ const authRouter = Router();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "juan.perez@email.com"
+ *                 example: "juan.perez@gmail.com"
  *               password:
  *                 type: string
  *                 minLength: 6
@@ -97,7 +97,7 @@ const authRouter = Router();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "juan.perez@email.com"
+ *                 example: "juan.perez@gmail.com"
  *               password:
  *                 type: string
  *                 example: "miPassword123"

@@ -154,7 +154,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 curl -X POST \
      -H "Authorization: Bearer YOUR_TOKEN" \
      -H "Content-Type: application/json" \
-     -d '{"name":"Netflix","price":15.99,"currency":"USD","frequency":"mensual","startDate":"2024-01-01","renewalDate":"2024-02-01"}' \
+     -d '{"name":"Netflix","price":15.99,"currency":"USD","frequency":"mensual","startDate":"2025-06-23","renewalDate":"2025-07-23"}' \
      http://localhost:4000/api/v1/subscriptions
 ```
 

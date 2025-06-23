@@ -108,19 +108,19 @@ Los errores se retornan con el formato:
                             type: 'string',
                             format: 'email',
                             description: 'Email único del usuario',
-                            example: 'juan.perez@email.com'
+                            example: 'juan.perez@gmail.com'
                         },
                         createdAt: {
                             type: 'string',
                             format: 'date-time',
                             description: 'Fecha de creación',
-                            example: '2024-01-15T10:30:00.000Z'
+                            example: '2025-01-15T10:30:00.000Z'
                         },
                         updatedAt: {
                             type: 'string',
                             format: 'date-time',
                             description: 'Fecha de última actualización',
-                            example: '2024-01-15T10:30:00.000Z'
+                            example: '2025-01-15T10:30:00.000Z'
                         }
                     }
                 },
@@ -182,13 +182,13 @@ Los errores se retornan con el formato:
                             type: 'string',
                             format: 'date',
                             description: 'Fecha de inicio de la suscripción',
-                            example: '2024-01-01'
+                            example: '2025-06-23'
                         },
                         renewalDate: {
                             type: 'string',
                             format: 'date',
                             description: 'Próxima fecha de renovación',
-                            example: '2024-02-01'
+                            example: '2025-07-23'
                         },
                         website: {
                             type: 'string',
@@ -211,13 +211,13 @@ Los errores se retornan con el formato:
                             type: 'string',
                             format: 'date-time',
                             description: 'Fecha de creación',
-                            example: '2024-01-15T10:30:00.000Z'
+                            example: '2025-01-15T10:30:00.000Z'
                         },
                         updatedAt: {
                             type: 'string',
                             format: 'date-time',
                             description: 'Fecha de última actualización',
-                            example: '2024-01-15T10:30:00.000Z'
+                            example: '2025-01-15T10:30:00.000Z'
                         }
                     }
                 },

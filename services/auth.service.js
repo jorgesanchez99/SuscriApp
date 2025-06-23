@@ -247,18 +247,52 @@ class AuthService {
         return true;
     }    /**
      * Cerrar sesión (invalidar token)
-     * En una implementación real, podrías mantener una blacklist de tokens
      * @param {string} token - Token a invalidar
      * @returns {Promise<boolean>} True si se cerró exitosamente
      */
-    // eslint-disable-next-line no-unused-vars
     static async signOut(token) {
-        // Por ahora solo retornamos true
-        // En una implementación más robusta, podrías:
-        // 1. Mantener una blacklist de tokens en Redis
-        // 2. Usar refresh tokens
-        // 3. Cambiar el secret del usuario específico
-        return true;
+        // Si no hay token, consideramos que ya está cerrada la sesión
+        if (!token) {
+            return true;
+        }
+
+        try {
+            // Verificar que el token sea válido
+            const decoded = jwt.verify(token, JWT_SECRET);
+            const userId = decoded._id || decoded.id;
+
+            if (!userId) {
+                const error = new Error("Token inválido");
+                error.statusCode = 401;
+                throw error;
+            }
+
+            // Verificar que el usuario existe
+            const user = await UserService.getUserById(userId);
+            if (!user) {
+                const error = new Error("Usuario no encontrado");
+                error.statusCode = 404;
+                throw error;
+            }
+
+            // Por ahora solo validamos que el token sea correcto
+            // En el futuro aquí se podría agregar blacklist
+            return true;
+
+        } catch (error) {
+            // Si el token ya expiró, consideramos exitoso el cierre
+            if (error.name === "TokenExpiredError") {
+                return true;
+            }
+
+            // Si el token es inválido, también consideramos exitoso
+            if (error.name === "JsonWebTokenError") {
+                return true;
+            }
+
+            // Para otros errores (como usuario no encontrado), los propagamos
+            throw error;
+        }
     }
 }
 

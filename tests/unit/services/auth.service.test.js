@@ -536,15 +536,79 @@ describe('AuthService - Real Unit Tests', () => {
   });
 
   describe('signOut', () => {
-    test('should return true for successful sign out', async () => {
+    test('should return true for valid token with existing user', async () => {
       // Arrange
-      const token = 'some-token';
+      const userId = 'user123';
+      const token = 'valid-jwt-token';
+      const mockUser = { _id: userId, name: 'Test User' };
+      
+      jwt.verify.mockReturnValue({ _id: userId });
+      UserService.getUserById.mockResolvedValue(mockUser);
 
       // Act
       const result = await AuthService.signOut(token);
 
       // Assert
       expect(result).toBe(true);
+      expect(jwt.verify).toHaveBeenCalledWith(token, 'test-secret');
+      expect(UserService.getUserById).toHaveBeenCalledWith(userId);
+    });
+
+    test('should return true when no token provided', async () => {
+      // Act
+      const result = await AuthService.signOut(null);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(jwt.verify).not.toHaveBeenCalled();
+    });
+
+    test('should return true for expired token', async () => {
+      // Arrange
+      const token = 'expired-token';
+      jwt.verify.mockImplementation(() => {
+        const error = new Error('Token expired');
+        error.name = 'TokenExpiredError';
+        throw error;
+      });
+
+      // Act
+      const result = await AuthService.signOut(token);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(jwt.verify).toHaveBeenCalledWith(token, 'test-secret');
+    });
+
+    test('should return true for invalid token format', async () => {
+      // Arrange
+      const token = 'invalid-token-format';
+      jwt.verify.mockImplementation(() => {
+        const error = new Error('Invalid token');
+        error.name = 'JsonWebTokenError';
+        throw error;
+      });
+
+      // Act
+      const result = await AuthService.signOut(token);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(jwt.verify).toHaveBeenCalledWith(token, 'test-secret');
+    });
+
+    test('should throw error when user not found', async () => {
+      // Arrange
+      const userId = 'nonexistent-user';
+      const token = 'valid-token';
+      
+      jwt.verify.mockReturnValue({ _id: userId });
+      UserService.getUserById.mockResolvedValue(null);
+
+      // Act & Assert
+      await expect(AuthService.signOut(token)).rejects.toThrow('Usuario no encontrado');
+      expect(jwt.verify).toHaveBeenCalledWith(token, 'test-secret');
+      expect(UserService.getUserById).toHaveBeenCalledWith(userId);
     });
   });
 });

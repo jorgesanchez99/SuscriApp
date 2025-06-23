@@ -46,8 +46,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           currency: 'USD',
           frequency: 'mensual',
           category: 'streaming',
-          startDate: '2024-01-01',
-          renewalDate: '2024-02-01',
+          startDate: '2025-06-23',
+          renewalDate: '2025-07-23',
           status: 'activa',
           website: 'https://netflix.com',
           notes: 'Cuenta compartida con familia'
@@ -67,8 +67,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 15.99,
           currency: 'USD',
           frequency: 'mensual',
-          startDate: '2024-01-01',
-          renewalDate: '2024-02-01'
+          startDate: '2025-06-23',
+          renewalDate: '2025-07-23'
         }
       };
 
@@ -92,8 +92,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 0, // Precio inválido (debe ser > 0.01)
           currency: 'USD',
           frequency: 'mensual',
-          startDate: '2024-01-01',
-          renewalDate: '2024-02-01'
+          startDate: '2025-06-23',
+          renewalDate: '2025-07-23'
         }
       };
 
@@ -117,8 +117,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 15.999, // Más de 2 decimales
           currency: 'USD',
           frequency: 'mensual',
-          startDate: '2024-01-01',
-          renewalDate: '2024-02-01'
+          startDate: '2025-06-23',
+          renewalDate: '2025-07-23'
         }
       };
 
@@ -142,8 +142,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 15.99,
           currency: 'XYZ', // Moneda inválida
           frequency: 'mensual',
-          startDate: '2024-01-01',
-          renewalDate: '2024-02-01'
+          startDate: '2025-06-23',
+          renewalDate: '2025-07-23'
         }
       };
 
@@ -167,8 +167,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 15.99,
           currency: 'USD',
           frequency: 'daily', // Frecuencia inválida
-          startDate: '2024-01-01',
-          renewalDate: '2024-02-01'
+          startDate: '2025-06-23',
+          renewalDate: '2025-07-23'
         }
       };
 
@@ -192,8 +192,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 15.99,
           currency: 'USD',
           frequency: 'mensual',
-          startDate: '2024-02-01',
-          renewalDate: '2024-01-01' // Fecha anterior a startDate
+          startDate: '2025-07-23',
+          renewalDate: '2025-06-23' // Fecha anterior a startDate
         }
       };
 
@@ -217,8 +217,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           price: 15.99,
           currency: 'USD',
           frequency: 'mensual',
-          startDate: '2024-01-01',
-          renewalDate: '2024-01-01' // Misma fecha
+          startDate: '2025-06-23',
+          renewalDate: '2025-06-23' // Misma fecha
         }
       };
 
@@ -355,8 +355,8 @@ describe('Subscription Validators - Real Unit Tests', () => {
           id: '507f1f77bcf86cd799439011'
         },
         body: {
-          startDate: '2024-02-01',
-          renewalDate: '2024-01-01' // Fecha anterior a startDate
+          startDate: '2025-07-23',
+          renewalDate: '2025-06-23' // Fecha anterior a startDate
         }
       };
 
@@ -379,7 +379,7 @@ describe('Subscription Validators - Real Unit Tests', () => {
           id: '507f1f77bcf86cd799439011'
         },
         body: {
-          renewalDate: '2024-03-01' // Solo renewalDate, sin startDate
+          renewalDate: '2025-03-01' // Solo renewalDate, sin startDate
         }
       };
 

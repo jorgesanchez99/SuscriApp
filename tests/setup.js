@@ -37,8 +37,8 @@ global.createTestData = {
       currency: 'USD',
       frequency: 'mensual',
       category: 'streaming',
-      startDate: '2024-01-01',
-      renewalDate: '2024-02-01',
+      startDate: '2025-06-23',
+      renewalDate: '2025-07-23',
       website: 'https://netflix.com',
       notes: 'Cuenta compartida con familia'
     },
@@ -47,8 +47,8 @@ global.createTestData = {
       price: 9.99,
       currency: 'USD',
       frequency: 'mensual',
-      startDate: '2024-01-01',
-      renewalDate: '2024-02-01'
+      startDate: '2025-06-23',
+      renewalDate: '2025-07-23'
     }
   }
 };

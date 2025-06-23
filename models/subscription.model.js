@@ -9,6 +9,10 @@ const subscriptionSchema = new mongoose.Schema({
         maxlength: [100, 'El nombre no debe superar los 100 caracteres'],
         match: [/^[a-zA-Z\s]+$/, 'El nombre solo puede contener letras sin tildes ni ñ, y espacios'],
     },
+    description: {
+        type: String,
+        maxlength: [500, 'La descripción no puede superar los 500 caracteres'],
+    },
     price: {
         type: Number,
         required: [true, 'El precio de la suscripción es obligatorio'],
@@ -28,7 +32,7 @@ const subscriptionSchema = new mongoose.Schema({
     category: {
         type: String,
         required: [true, 'La categoría de la suscripción es obligatoria'],
-        enum: ['deportes', 'noticias', 'entretenimiento', 'estilo de vida','tecnologia', 'educación', 'salud', 'finanzas', 'otros']
+        enum: ['streaming', 'software', 'gaming', 'educacion', 'productividad', 'salud', 'finanzas', 'otro'],
     },
     paymentMethod: {
         type: String,

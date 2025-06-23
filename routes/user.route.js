@@ -125,7 +125,7 @@ const userRouter = Router();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "juan.carlos@email.com"
+ *                 example: "juan.carlos@gmail.com"
  *             additionalProperties: false
  *     responses:
  *       200:

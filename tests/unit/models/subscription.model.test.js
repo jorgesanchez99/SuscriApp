@@ -29,7 +29,7 @@ describe('Subscription Model - Unit Tests', () => {
       price: 15.99,
       currency: 'USD',
       frequency: 'mensual',
-      category: 'entretenimiento',
+      category: 'streaming',
       paymentMethod: 'tarjeta de crédito',
       status: 'activa',
       startDate: new Date(), // Use current date to avoid expiration
@@ -47,7 +47,7 @@ describe('Subscription Model - Unit Tests', () => {
       expect(savedSubscription.price).toBe(15.99);
       expect(savedSubscription.currency).toBe('USD');
       expect(savedSubscription.frequency).toBe('mensual');
-      expect(savedSubscription.category).toBe('entretenimiento');
+      expect(savedSubscription.category).toBe('streaming');
       expect(savedSubscription.paymentMethod).toBe('tarjeta de crédito');
       expect(savedSubscription.status).toBe('activa');
       expect(savedSubscription.renewalDate).toBeDefined();
@@ -60,7 +60,7 @@ describe('Subscription Model - Unit Tests', () => {
       const minimalData = {
         name: 'Basic Service',
         price: 10,
-        category: 'otros',
+        category: 'otro',
         startDate: new Date(), // Use current date
         user: new mongoose.Types.ObjectId()
       };
@@ -266,10 +266,7 @@ describe('Subscription Model - Unit Tests', () => {
       });
 
       test('should accept valid categories', async () => {
-        const validCategories = [
-          'deportes', 'noticias', 'entretenimiento', 'estilo de vida',
-          'tecnologia', 'educación', 'salud', 'finanzas', 'otros'
-        ];
+        const validCategories = ['streaming', 'software', 'gaming', 'educacion', 'productividad', 'salud', 'finanzas', 'otro'];
 
         for (const category of validCategories) {
           // Arrange
@@ -410,7 +407,7 @@ describe('Subscription Model - Unit Tests', () => {
 
       test('should reject renewal date before start date', async () => {
         // Arrange
-        const startDate = new Date('2024-01-01');
+        const startDate = new Date('2025-06-23');
         const renewalDate = new Date('2023-12-31');
         const invalidData = {
           ...validSubscriptionData,
@@ -425,8 +422,8 @@ describe('Subscription Model - Unit Tests', () => {
 
       test('should accept valid renewal date after start date', async () => {
         // Arrange
-        const startDate = new Date('2024-01-01');
-        const renewalDate = new Date('2024-02-01');
+        const startDate = new Date('2025-06-23');
+        const renewalDate = new Date('2025-07-23');
         const validData = {
           ...validSubscriptionData,
           startDate,
@@ -473,8 +470,8 @@ describe('Subscription Model - Unit Tests', () => {
       name: 'Test Service',
       price: 10,
       currency: 'USD',
-      category: 'otros',
-      startDate: new Date('2024-01-01'),
+      category: 'otro',
+      startDate: new Date('2025-06-23'),
       user: new mongoose.Types.ObjectId()
     };
 
@@ -488,7 +485,7 @@ describe('Subscription Model - Unit Tests', () => {
         const savedSubscription = await subscription.save();
 
         // Assert
-        const expectedRenewalDate = new Date('2024-01-02'); // +1 day
+        const expectedRenewalDate = new Date('2025-06-24'); // +1 day from 2025-06-23
         expect(savedSubscription.renewalDate.toDateString()).toBe(expectedRenewalDate.toDateString());
       });
 
@@ -501,7 +498,7 @@ describe('Subscription Model - Unit Tests', () => {
         const savedSubscription = await subscription.save();
 
         // Assert
-        const expectedRenewalDate = new Date('2024-01-08'); // +7 days
+        const expectedRenewalDate = new Date('2025-06-30'); // +7 days from 2025-06-23
         expect(savedSubscription.renewalDate.toDateString()).toBe(expectedRenewalDate.toDateString());
       });
 
@@ -514,13 +511,13 @@ describe('Subscription Model - Unit Tests', () => {
         const savedSubscription = await subscription.save();
 
         // Assert
-        const expectedRenewalDate = new Date('2024-01-31'); // +30 days
+        const expectedRenewalDate = new Date('2025-07-23'); // +30 days from 2025-06-23
         expect(savedSubscription.renewalDate.toDateString()).toBe(expectedRenewalDate.toDateString());
       });
 
       test('should calculate renewal date for annual frequency', async () => {
         // Arrange
-        const startDate = new Date('2024-01-01');
+        const startDate = new Date('2025-06-23');
         const subscriptionData = { ...baseData, frequency: 'anual', startDate };
 
         // Act
@@ -528,14 +525,14 @@ describe('Subscription Model - Unit Tests', () => {
         const savedSubscription = await subscription.save();
 
         // Assert
-        const expectedRenewalDate = new Date('2024-01-01');
+        const expectedRenewalDate = new Date('2025-06-23');
         expectedRenewalDate.setDate(expectedRenewalDate.getDate() + 365); // +365 days from start
         expect(savedSubscription.renewalDate.toDateString()).toBe(expectedRenewalDate.toDateString());
       });
 
       test('should not override manually set renewal date', async () => {
         // Arrange
-        const manualRenewalDate = new Date('2024-06-01');
+        const manualRenewalDate = new Date('2025-07-01'); // After start date 2025-06-23
         const subscriptionData = {
           ...baseData,
           frequency: 'mensual',
@@ -554,8 +551,8 @@ describe('Subscription Model - Unit Tests', () => {
     describe('Automatic Status Update', () => {
       test('should mark subscription as expired when renewal date has passed', async () => {
         // Arrange
-        const pastDate = new Date('2023-01-01'); // Past date
-        const pastRenewalDate = new Date('2023-02-01'); // Also past
+        const pastDate = new Date('2023-06-23'); // Past date
+        const pastRenewalDate = new Date('2023-07-23'); // Also past
         const subscriptionData = {
           ...baseData,
           startDate: pastDate,
@@ -591,8 +588,8 @@ describe('Subscription Model - Unit Tests', () => {
 
       test('should mark as expired even if status was manually set to other value', async () => {
         // Arrange
-        const pastDate = new Date('2023-01-01');
-        const pastRenewalDate = new Date('2023-02-01');
+        const pastDate = new Date('2023-06-23');
+        const pastRenewalDate = new Date('2023-07-23');
         const subscriptionData = {
           ...baseData,
           startDate: pastDate,
@@ -612,7 +609,7 @@ describe('Subscription Model - Unit Tests', () => {
     describe('Combined Middleware Functionality', () => {
       test('should auto-calculate renewal date and mark as expired if calculated date is past', async () => {
         // Arrange - start date very far in the past with monthly frequency
-        const veryPastDate = new Date('2020-01-01');
+        const veryPastDate = new Date('2020-06-23');
         const subscriptionData = {
           ...baseData,
           startDate: veryPastDate,
@@ -638,8 +635,8 @@ describe('Subscription Model - Unit Tests', () => {
         price: 10,
         currency: 'USD',
         frequency: 'mensual',
-        category: 'otros',
-        startDate: new Date('2024-01-01'),
+        category: 'otro',
+        startDate: new Date('2025-06-23'),
         user: new mongoose.Types.ObjectId()
       };
 
@@ -663,8 +660,8 @@ describe('Subscription Model - Unit Tests', () => {
         name: 'Test Service',
         price: 10,
         currency: 'USD',
-        category: 'otros',
-        startDate: new Date('2024-01-01'),
+        category: 'otro',
+        startDate: new Date('2025-06-23'),
         user: new mongoose.Types.ObjectId()
       };
 
