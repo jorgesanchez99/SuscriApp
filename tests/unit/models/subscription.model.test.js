@@ -341,7 +341,7 @@ describe('Subscription Model - Unit Tests', () => {
       });
 
       test('should accept valid statuses', async () => {
-        const validStatuses = ['activa', 'cancelada', 'pendiente', 'expirada'];
+        const validStatuses = ['activa', 'cancelada', 'pausada', 'expirada'];
 
         for (const status of validStatuses) {
           // Arrange - use future dates to avoid automatic expiration
@@ -594,7 +594,7 @@ describe('Subscription Model - Unit Tests', () => {
           ...baseData,
           startDate: pastDate,
           renewalDate: pastRenewalDate,
-          status: 'pendiente' // Manually set to pending
+          status: 'pausada' // Manually set to pending
         };
 
         // Act

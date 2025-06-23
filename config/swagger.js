@@ -174,7 +174,7 @@ Los errores se retornan con el formato:
                         },
                         status: {
                             type: 'string',
-                            enum: ['activa', 'cancelada', 'pendiente', 'expirada'],
+                            enum: ['activa', 'cancelada', 'pausada', 'expirada'],
                             description: 'Estado actual de la suscripción',
                             example: 'activa'
                         },

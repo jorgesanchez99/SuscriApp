@@ -71,7 +71,7 @@ const subscriptionRouter = Router();
  *         name: frequency
  *         schema:
  *           type: string
- *           enum: [mensual, trimestral, semestral, anual]
+ *           enum: [diaria, semanal, mensual, anual]
  *         description: Filtrar por frecuencia
  *     responses:
  *       200:
@@ -164,7 +164,7 @@ const subscriptionRouter = Router();
  *                 example: "USD"
  *               frequency:
  *                 type: string
- *                 enum: [mensual, trimestral, semestral, anual]
+ *                 enum: [diaria, semanal, mensual, anual]
  *                 example: "mensual"
  *               category:
  *                 type: string
