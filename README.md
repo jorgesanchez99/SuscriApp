@@ -93,13 +93,13 @@ mongod
 ```bash
 npm run dev
 ```
-La aplicación estará disponible en http://localhost:3000
+La aplicación estará disponible en http://localhost:4000
 
 ### Documentación API (Swagger)
 ```bash
 npm run dev
 ```
-Luego visita: http://localhost:3000/api-docs
+Luego visita: http://localhost:4000/api-docs
 
 ### Producción
 ```bash
@@ -115,7 +115,7 @@ La API incluye documentación completa con Swagger UI que permite:
 - 📋 **Ver esquemas de datos** detallados
 - 🔐 **Autenticación integrada** para endpoints protegidos
 
-**URL de acceso**: http://localhost:3000/api-docs
+**URL de acceso**: http://localhost:4000/api-docs
 
 ### 📋 Endpoints Principales
 
@@ -221,7 +221,7 @@ tests/
 
 | Variable | Requerida | Descripción | Ejemplo |
 |----------|-----------|-------------|---------|
-| `PORT` | No | Puerto del servidor | `3000` |
+| `PORT` | No | Puerto del servidor | `4000` |
 | `NODE_ENV` | No | Entorno de ejecución | `development` |
 | `DB_URI` | ✅ | Conexión a MongoDB | `mongodb://localhost:27017/db` |
 | `JWT_SECRET` | ✅ | Clave secreta JWT (min 32 chars) | `abc123...` |
@@ -350,7 +350,7 @@ tests/
 
 ## 🔗 Enlaces Útiles
 
-- **Swagger UI**: http://localhost:3000/api-docs
+- **Swagger UI**: http://localhost:4000/api-docs
 - **MongoDB Compass**: Para visualizar la base de datos
 - **Arcjet Dashboard**: https://app.arcjet.com
 - **Postman Collection**: Importar desde Swagger

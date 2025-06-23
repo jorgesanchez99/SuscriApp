@@ -19,7 +19,7 @@ if (process.env.JWT_SECRET && process.env.JWT_SECRET.length < 64) {
 }
 
 // Export environment variables with defaults
-export const PORT = process.env.PORT || 3000;
+export const PORT = process.env.PORT || 4000;
 export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const DB_URI = process.env.DB_URI;
 export const JWT_SECRET = process.env.JWT_SECRET;
