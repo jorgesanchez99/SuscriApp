@@ -178,7 +178,7 @@ class SubscriptionService {    /**
      * @param {string} userId - ID del usuario (opcional)
      * @returns {Promise<Array>} Lista de suscripciones próximas a renovar
      */
-    static async getUpcomingRenewals(days = 7, userId = null) {
+    static async getUpcomingRenewals(days = 30, userId = null) {
         try {
             const today = new Date();
             const futureDate = new Date();

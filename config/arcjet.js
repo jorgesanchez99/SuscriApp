@@ -25,7 +25,7 @@ const aj = arcjet({
         mode: "LIVE", // will block requests. Use "DRY_RUN" to log only
       refillRate: 5, // Refill 5 tokens per interval
       interval: 10, // Refill every 10 seconds
-      capacity: 10, // Bucket capacity of 10 tokens
+      capacity: 5, // Bucket capacity of 10 tokens
       //requested: 1, // Number of tokens requested per request
     }),
   ],
