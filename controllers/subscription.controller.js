@@ -143,7 +143,7 @@ export const getUpcomingRenewals = async (req, res, next) => {
         const userId = req.user._id;
 
         const renewals = await SubscriptionService.getUpcomingRenewals(
-            parseInt(days) || 7, 
+            parseInt(days) || 30, 
             userId
         );
 

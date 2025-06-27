@@ -184,6 +184,8 @@ class SubscriptionService {    /**
             const futureDate = new Date();
             futureDate.setDate(today.getDate() + days);
 
+            // console.log(`Buscando renovaciones entre ${today.toISOString()} y ${futureDate.toISOString()}`);
+
             const filters = {
                 status: 'activa',
                 renewalDate: {
@@ -191,6 +193,7 @@ class SubscriptionService {    /**
                     $lte: futureDate
                 }
             };
+
 
             if (userId) filters.user = userId;
 
