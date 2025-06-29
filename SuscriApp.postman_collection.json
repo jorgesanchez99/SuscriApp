@@ -1,0 +1,2005 @@
+{
+	"info": {
+		"_postman_id": "f43277bf-682b-4e0c-b934-f76604d833d6",
+		"name": "SuscriApp",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27060984"
+	},
+	"item": [
+		{
+			"name": "createUser",
+			"item": [
+				{
+					"name": "createUser-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"// Obtiene el cuerpo de la petición que se ENVIÓ, para poder comparar.\r",
+									"const requestBody = pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+									"\r",
+									"// --- Suite de Pruebas para Creación Exitosa de Usuario ---\r",
+									"\r",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 201 Created.\r",
+									"// El código 201 es el estándar para un recurso que ha sido creado exitosamente.\r",
+									"pm.test(\"El código de estado debe ser 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que el campo 'success' sea 'true'.\r",
+									"pm.test(\"El campo 'success' debe ser true\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica el mensaje de éxito específico.\r",
+									"pm.test(\"El mensaje debe ser 'Usuario creado exitosamente'\", function () {\r",
+									"    pm.expect(responseData.message).to.eql(\"Usuario creado exitosamente\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica la estructura de los datos devueltos.\r",
+									"// Nos aseguramos de que el objeto 'data' contiene las propiedades 'token' y 'user'.\r",
+									"pm.test(\"La respuesta debe contener un token y los datos del usuario\", function () {\r",
+									"    pm.expect(responseData.data).to.be.an('object');\r",
+									"    pm.expect(responseData.data).to.have.property('token');\r",
+									"    pm.expect(responseData.data).to.have.property('user');\r",
+									"});\r",
+									"\r",
+									"// Prueba 5: Verifica que el token JWT no esté vacío.\r",
+									"// Un token vacío no sirve para nada, así que validamos que tenga contenido.\r",
+									"pm.test(\"El token no debe ser nulo o vacío\", function () {\r",
+									"    pm.expect(responseData.data.token).to.be.a('string').and.not.be.empty;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Luis\",\r\n    \"lastName\" : \"Santos\",\r\n    \"email\" : \"luis@gmail.com\",\r\n    \"password\" : \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/sign-up",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser-invalid-emails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON para poder analizarla.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de Formato de Email en Sign-Up ---\r",
+									"\r",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 400 Bad Request.\r",
+									"// Esto confirma que tu API está validando los formatos de entrada correctamente.\r",
+									"pm.test(\"El código de estado debe ser 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que el campo 'success' en el cuerpo del JSON sea 'false'.\r",
+									"pm.test(\"El campo 'success' debe ser false\", function () {\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica el mensaje de error específico.\r",
+									"// Clave para asegurar que el usuario final entiende por qué falló el registro.\r",
+									"pm.test(\"El mensaje de error debe ser 'Formato de email invalido'\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Formato de email inválido\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.\r",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 400\", function () {\r",
+									"    pm.expect(responseData.error.statusCode).to.eql(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Luis\",\r\n    \"lastName\" : \"Santos\",\r\n    \"email\" : \"luisgmail.com\",\r\n    \"password\" : \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/sign-up",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser-empty-fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON para poder analizarla.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de Campos Obligatorios ---\r",
+									"\r",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 400 Bad Request.\r",
+									"pm.test(\"El código de estado debe ser 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que el campo 'success' en el cuerpo del JSON sea 'false'.\r",
+									"pm.test(\"El campo 'success' debe ser false\", function () {\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica el mensaje de error específico.\r",
+									"// Asegura que la API notifica correctamente que todos los campos son requeridos.\r",
+									"pm.test(\"El mensaje de error debe ser 'Todos los campos son obligatorios'\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Todos los campos son obligatorios\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.\r",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 400\", function () {\r",
+									"    pm.expect(responseData.error.statusCode).to.eql(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"\",\r\n    \"lastName\" : \"\",\r\n    \"email\" : \"\",\r\n    \"password\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/sign-up",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "login",
+			"item": [
+				{
+					"name": "login-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Test 1: Comprobar el código de estado",
+									"pm.test(\"La respuesta debe ser 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// Test 2: Comprobar que la respuesta contiene un token",
+									"pm.test(\"La respuesta debe incluir un token de autenticación\", function () {",
+									"    // Convierte la respuesta (que es texto) a un objeto JSON",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    // Comprueba que el objeto JSON tiene una propiedad llamada \"data\" y dentro otra llamada \"token\"",
+									"    pm.expect(responseData.data).to.have.property('token');",
+									"});",
+									"",
+									"// Test 3: Comprobar que el token no está vacío",
+									"pm.test(\"El token no debe ser nulo o vacío\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    // Comprueba que el valor de la propiedad 'token' no sea un string vacío",
+									"    pm.expect(responseData.data.token).to.not.be.empty;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"jorge@gmail.com\",\r\n    \"password\" : \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/sign-in",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login-error-credentials",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON para poder analizarla.",
+									"const responseData = pm.response.json();",
+									"",
+									"// --- Suite de Pruebas para Error de Autenticación ---",
+									"",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 401 Unauthorized.",
+									"// Esto confirma que la API está usando los códigos HTTP correctamente.",
+									"pm.test(\"El código de estado debe ser 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"// Prueba 2: Verifica que el campo 'success' en el cuerpo del JSON sea 'false'.",
+									"// Esto valida la lógica interna de tu respuesta.",
+									"pm.test(\"El campo 'success' debe ser false\", function () {",
+									"    pm.expect(responseData.success).to.be.false;",
+									"});",
+									"",
+									"// Prueba 3: Verifica el mensaje de error específico.",
+									"// Esto es crucial para asegurar que estás dando la retroalimentación correcta al usuario.",
+									"pm.test(\"El mensaje de error debe ser 'Usuario o contraseña incorrectos'\", function () {",
+									"    pm.expect(responseData.error.message).to.eql(\"Usuario o contraseña incorrectos\");",
+									"});",
+									"",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.",
+									"// Una buena práctica para asegurar la consistencia entre el estado HTTP y el cuerpo de la respuesta.",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 401\", function () {",
+									"    pm.expect(responseData.error.statusCode).to.eql(401);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"jorge@gmail.com\",\r\n    \"password\" : \"asdasdasd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/sign-in",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login-error-empty-fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON para poder analizarla.",
+									"const responseData = pm.response.json();",
+									"",
+									"// --- Suite de Pruebas para Error de Datos Faltantes ---",
+									"",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 400 Bad Request.",
+									"// Confirma que la API rechaza correctamente una petición con datos incompletos.",
+									"pm.test(\"El código de estado debe ser 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"// Prueba 2: Verifica que el campo 'success' en el cuerpo del JSON sea 'false'.",
+									"pm.test(\"El campo 'success' debe ser false\", function () {",
+									"    pm.expect(responseData.success).to.be.false;",
+									"});",
+									"",
+									"// Prueba 3: Verifica el mensaje de error específico.",
+									"// Asegura que la API informa claramente qué campos son necesarios.",
+									"pm.test(\"El mensaje de error debe ser 'Email y contraseña son obligatorios'\", function () {",
+									"    pm.expect(responseData.error.message).to.eql(\"Email y contraseña son obligatorios\");",
+									"});",
+									"",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 400\", function () {",
+									"    pm.expect(responseData.error.statusCode).to.eql(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"\",\r\n    \"password\" : \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/sign-in",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "getUsers",
+			"item": [
+				{
+					"name": "getUsers-success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API como un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Pruebas Básicas de la Respuesta ---\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// --- Prueba de Estructura Principal ---\r",
+									"pm.test(\"La respuesta debe contener una propiedad 'data' que sea un array\", function () {\r",
+									"    pm.expect(responseData.data).to.be.an('array', \"Se esperaba que 'data' fuera un array\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas de Contenido y Esquema del Array de Usuarios ---\r",
+									"// Este bloque es flexible y funciona si el array está vacío, tiene 1 o muchos usuarios.\r",
+									"if (responseData.data && responseData.data.length > 0) {\r",
+									"    \r",
+									"    pm.test(\"La lista de usuarios no debería estar vacía\", function () {\r",
+									"        pm.expect(responseData.data).to.not.be.empty;\r",
+									"    });\r",
+									"\r",
+									"    // Se usa un bucle 'forEach' para validar CADA objeto 'user' dentro del array 'data'.\r",
+									"    responseData.data.forEach(function(user, index) {\r",
+									"        pm.test(`Usuario #${index + 1}: Debe tener una estructura válida`, function () {\r",
+									"            // Verificamos que las propiedades más importantes existan y tengan el tipo de dato correcto.\r",
+									"            pm.expect(user).to.have.property('_id').and.to.be.a('string');\r",
+									"            pm.expect(user).to.have.property('name').and.to.be.a('string');\r",
+									"            pm.expect(user).to.have.property('lastName').and.to.be.a('string');\r",
+									"            pm.expect(user).to.have.property('email').and.to.be.a('string');\r",
+									"            \r",
+									"            // Prueba extra: valida que el email tenga un formato correcto.\r",
+									"            pm.expect(user.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"El formato del email es inválido\");\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"} else {\r",
+									"    // Si la lista de usuarios está vacía, el test lo considera válido.\r",
+									"    console.log(\"La lista 'data' de usuarios está vacía, se omiten las validaciones de los items.\");\r",
+									"    pm.test(\"La lista 'data' está vacía, lo cual es un escenario válido\", function () {\r",
+									"        pm.expect(responseData.data).to.be.an('array').and.to.be.empty;\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById-success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API.\r",
+									"const responseData = pm.response.json();\r",
+									"const userData = responseData.data;\r",
+									"\r",
+									"// --- Suite de Pruebas para Obtener un Usuario Específico por ID ---\r",
+									"\r",
+									"// Prueba 1: Verifica el código de estado HTTP.\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el estado de éxito de la operación.\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que 'data' sea un único objeto (no un array).\r",
+									"pm.test(\"La respuesta debe contener un único objeto 'data'\", function () {\r",
+									"    pm.expect(userData).to.be.an('object');\r",
+									"    pm.expect(userData).to.not.be.an('array');\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica la estructura y tipos de datos del objeto de usuario.\r",
+									"pm.test(\"El usuario debe tener las propiedades y tipos de datos correctos\", function () {\r",
+									"    pm.expect(userData).to.have.property('_id').and.to.be.a('string').and.not.be.empty;\r",
+									"    pm.expect(userData).to.have.property('name').and.to.be.a('string');\r",
+									"    pm.expect(userData).to.have.property('lastName').and.to.be.a('string');\r",
+									"    pm.expect(userData).to.have.property('email').and.to.be.a('string');\r",
+									"    \r",
+									"    // Verificación extra para el formato del email.\r",
+									"    pm.expect(userData.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"El formato del email es inválido\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 5 (Avanzada): Verifica que el ID del usuario en la respuesta\r",
+									"// coincida con el ID que se pidió en la URL de la petición.\r",
+									"// NOTA: Esto asume que usas una variable de ruta en Postman como /users/:userId\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    // Asume que la última variable en la ruta es el ID que nos interesa.\r",
+									"    const requestedId = pathVariables[pathVariables.length - 1].value;\r",
+									"    \r",
+									"    pm.test(\"El ID del usuario en la respuesta coincide con el ID de la petición\", function () {\r",
+									"        pm.expect(userData._id).to.eql(requestedId, \"El ID en la respuesta no coincide con el ID en la URL\");\r",
+									"    });\r",
+									"} else {\r",
+									"    console.warn(\"No se encontraron variables de ruta en la URL. Se omite la prueba de coincidencia de ID.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/6855e76b5bdb035e3d5def04",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"6855e76b5bdb035e3d5def04"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById-error-invalid-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API como un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de ID de Usuario Inválido (Simple) ---\r",
+									"\r",
+									"// Prueba 1: Verifica el código de estado HTTP.\r",
+									"pm.test(\"El código de estado debe ser 400 Bad Request\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que la operación no fue exitosa.\r",
+									"pm.test(\"El campo 'success' debe ser false\", function () {\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que el objeto de error exista y contenga el mensaje correcto.\r",
+									"pm.test(\"El mensaje de error debe ser 'ID de usuario no válido'\", function () {\r",
+									"    // Verifica que el objeto 'error' exista.\r",
+									"    pm.expect(responseData.error).to.be.an('object');\r",
+									"    // Verifica el contenido del mensaje.\r",
+									"    pm.expect(responseData.error.message).to.eql(\"ID de usuario no válido\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.\r",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 400\", function () {\r",
+									"    pm.expect(responseData.error.statusCode).to.eql(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/users/6855e76b5bdb",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"6855e76b5bdb"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "createSubscriptions",
+			"item": [
+				{
+					"name": "createSubscription-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y el cuerpo de la petición enviada.\r",
+									"const responseData = pm.response.json();\r",
+									"const requestBody = pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+									"\r",
+									"// --- Suite de Pruebas para Creación Exitosa de Suscripción ---\r",
+									"\r",
+									"// Prueba 1: Verifica el código de estado HTTP. 201 es el estándar para 'Creado'.\r",
+									"pm.test(\"El código de estado debe ser 201 Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el estado de éxito y el mensaje.\r",
+									"pm.test(\"La operación debe ser exitosa y tener el mensaje correcto\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"    pm.expect(responseData.message).to.eql(\"Suscripción creada exitosamente\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que la suscripción creada tiene una estructura básica correcta.\r",
+									"pm.test(\"El objeto 'data' debe existir y la suscripción debe tener un _id\", function () {\r",
+									"    pm.expect(responseData.data).to.be.an('object');\r",
+									"    pm.expect(responseData.data).to.have.property('_id').and.to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica los tipos de datos de campos clave en la respuesta.\r",
+									"pm.test(\"Los campos clave de la suscripción deben tener el tipo de dato correcto\", function () {\r",
+									"    pm.expect(responseData.data.name).to.be.a('string', \"El nombre debe ser un texto\");\r",
+									"    pm.expect(responseData.data.price).to.be.a('number', \"El precio debe ser un número\");\r",
+									"    pm.expect(responseData.data.status).to.eql('activa', \"El estado inicial debe ser 'activa'\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 5: La prueba de integridad de datos.\r",
+									"// Compara los datos enviados en la petición con los datos recibidos en la respuesta.\r",
+									"pm.test(\"Los datos de la suscripción creada deben coincidir con los datos enviados\", function () {\r",
+									"    // Compara el nombre\r",
+									"    pm.expect(requestBody).to.have.property('name');\r",
+									"    pm.expect(responseData.data.name).to.eql(requestBody.name);\r",
+									"    \r",
+									"    // Compara el precio\r",
+									"    pm.expect(requestBody).to.have.property('price');\r",
+									"    pm.expect(responseData.data.price).to.eql(requestBody.price);\r",
+									"\r",
+									"    // Compara la categoría\r",
+									"    pm.expect(requestBody).to.have.property('category');\r",
+									"    pm.expect(responseData.data.category).to.eql(requestBody.category);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Prime Video Netflix\",\r\n  \"price\": 29.99,\r\n  \"currency\": \"PEN\",\r\n  \"frequency\": \"mensual\",\r\n  \"category\": \"streaming\",\r\n  \"paymentMethod\": \"tarjeta de crédito\",\r\n  \"status\": \"activa\",\r\n  \"startDate\": \"2025-06-20T00:00:00.000Z\",\r\n  \"user\": \"6855e76b5bdb035e3d5def04\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createSubscription-error-invalid-fields",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"// Guardamos el array de detalles en una variable para un acceso más fácil.\r",
+									"const errorDetails = responseData.error ? responseData.error.details : [];\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de Validación Múltiple ---\r",
+									"\r",
+									"// Prueba 1: Verifica el estado general de la respuesta.\r",
+									"pm.test(\"El código de estado debe ser 400 y 'success' debe ser false\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el mensaje de error principal.\r",
+									"pm.test(\"El mensaje principal debe indicar un error de validación general\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Errores de validación en los datos enviados\");\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"\",\r\n  \"price\": 29.99,\r\n  \"currency\": \"\",\r\n  \"frequency\": \"mensual\",\r\n  \"category\": \"entretenimiento\",\r\n  \"paymentMethod\": \"tarjeta de crédito\",\r\n  \"status\": \"activa\",\r\n  \"startDate\": \"2025-06-20T00:00:00.000Z\",\r\n  \"user\": \"6855e76b5bdb035e3d5def04\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "getSubsciption",
+			"item": [
+				{
+					"name": "getSuscriptionsUserById-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API como un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Pruebas Básicas de la Respuesta ---\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// --- Prueba de Estructura Principal ---\r",
+									"pm.test(\"La respuesta debe contener una propiedad 'data' que sea un array\", function () {\r",
+									"    pm.expect(responseData.data).to.be.an('array');\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/users/6855e76b5bdb035e3d5def04",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"users",
+								"6855e76b5bdb035e3d5def04"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSuscriptionsUserById-error-invalid-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API.\r",
+									"const responseData = pm.response.json();\r",
+									"const errorDetails = responseData.error ? responseData.error.details : [];\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de ID de Usuario Inválido ---\r",
+									"\r",
+									"// Prueba 1: Verifica el estado general de la respuesta.\r",
+									"pm.test(\"El código de estado debe ser 400 y success debe ser false\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el mensaje de error principal.\r",
+									"pm.test(\"El mensaje principal debe indicar un error de validación\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Errores de validación en los datos enviados\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que el array 'details' contenga exactamente un error.\r",
+									"pm.test(\"La respuesta debe contener un array 'details' con un solo error\", function () {\r",
+									"    pm.expect(errorDetails).to.be.an('array').and.to.have.lengthOf(1, \"Se esperaba un solo objeto en el array 'details'\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas Específicas del Detalle del Error ---\r",
+									"\r",
+									"// Accedemos directamente al primer (y único) objeto de error.\r",
+									"const idError = errorDetails[0];\r",
+									"\r",
+									"pm.test(\"El detalle del error debe ser para el campo 'id' y tener el mensaje correcto\", function () {\r",
+									"    pm.expect(idError.field).to.eql(\"id\");\r",
+									"    pm.expect(idError.message).to.eql(\"ID de usuario no válido\"); // <-- Verificación del mensaje específico.\r",
+									"});\r",
+									"\r",
+									"// Prueba avanzada: Verifica que el 'value' en el error coincida con el ID inválido que se envió.\r",
+									"// Asume que el ID del usuario se pasa como una variable de ruta, ej: /users/:userId/...\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    // Asume que la variable de ruta que nos interesa es la que contiene el ID inválido.\r",
+									"    const invalidIdSent = pathVariables.find(variable => variable.value === idError.value);\r",
+									"    \r",
+									"    if (invalidIdSent) {\r",
+									"        pm.test(\"El valor del error debe ser el ID inválido que se envió en la URL\", function() {\r",
+									"            pm.expect(idError.value).to.eql(invalidIdSent.value);\r",
+									"        });\r",
+									"    } else {\r",
+									"        console.warn(\"No se pudo encontrar el ID inválido en las variables de ruta de la URL.\");\r",
+									"    }\r",
+									"} else {\r",
+									"    console.warn(\"No se encontraron variables de ruta en la URL. Se omite la prueba de coincidencia del valor de error.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/users/6855e76b5bdb035e3d5sdsdef04",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"users",
+								"6855e76b5bdb035e3d5sdsdef04"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSusbciptions-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Pruebas Básicas de la Respuesta ---\r",
+									"\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas de la Estructura Principal ---\r",
+									"\r",
+									"pm.test(\"La respuesta debe contener una lista 'data' y un objeto 'pagination'\", function () {\r",
+									"    pm.expect(responseData.data).to.be.an('array', \"La propiedad 'data' debería ser un array\");\r",
+									"    pm.expect(responseData.pagination).to.be.an('object', \"La propiedad 'pagination' debería ser un objeto\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas del Contenido de la Lista 'data' ---\r",
+									"\r",
+									"if (responseData.data && responseData.data.length > 0) {\r",
+									"    \r",
+									"    pm.test(\"La lista de suscripciones no debería estar vacía\", function () {\r",
+									"        pm.expect(responseData.data).to.not.be.empty;\r",
+									"    });\r",
+									"\r",
+									"    // Bucle para verificar la estructura de CADA suscripción en la lista.\r",
+									"    responseData.data.forEach(function(subscription, index) {\r",
+									"        pm.test(`Item #${index+1}: La suscripción tiene una estructura válida`, function () {\r",
+									"            pm.expect(subscription).to.have.property('_id').and.to.be.a('string');\r",
+									"            pm.expect(subscription).to.have.property('name').and.to.be.a('string');\r",
+									"            pm.expect(subscription).to.have.property('price').and.to.be.a('number');\r",
+									"            pm.expect(subscription).to.have.property('status', 'activa');\r",
+									"            pm.expect(subscription).to.have.property('user').and.to.be.an('object');\r",
+									"            pm.expect(subscription.user).to.have.property('email');\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"} else {\r",
+									"    console.log(\"La lista 'data' está vacía, se omiten las pruebas de los items.\");\r",
+									"}\r",
+									"\r",
+									"\r",
+									"// --- Pruebas del Objeto 'pagination' ---\r",
+									"\r",
+									"pm.test(\"El objeto de paginación tiene una estructura válida\", function () {\r",
+									"    const pagination = responseData.pagination;\r",
+									"    pm.expect(pagination).to.have.property('currentPage').and.to.be.a('number');\r",
+									"    pm.expect(pagination).to.have.property('totalPages').and.to.be.a('number');\r",
+									"    pm.expect(pagination).to.have.property('totalSubscriptions').and.to.be.a('number');\r",
+									"    pm.expect(pagination).to.have.property('hasNextPage').and.to.be.a('boolean');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSusbciptionsById-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"const subscriptionData = responseData.data;\r",
+									"\r",
+									"// --- Suite de Pruebas para Obtener una Suscripción Específica ---\r",
+									"\r",
+									"// Prueba 1: Verifica el código de estado HTTP.\r",
+									"// 200 OK es el código estándar para una petición GET exitosa.\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que la operación fue exitosa.\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que 'data' sea un único objeto.\r",
+									"// A diferencia de la lista, aquí esperamos un objeto, no un array.\r",
+									"pm.test(\"La respuesta debe contener un único objeto 'data'\", function () {\r",
+									"    pm.expect(subscriptionData).to.be.an('object');\r",
+									"    pm.expect(subscriptionData).to.not.be.an('array');\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica la estructura y tipos de datos de la suscripción.\r",
+									"pm.test(\"La suscripción debe tener las propiedades y tipos de datos correctos\", function () {\r",
+									"    pm.expect(subscriptionData).to.have.property('_id').and.to.be.a('string').and.not.be.empty;\r",
+									"    pm.expect(subscriptionData).to.have.property('name').and.to.be.a('string');\r",
+									"    pm.expect(subscriptionData).to.have.property('price').and.to.be.a('number');\r",
+									"    pm.expect(subscriptionData).to.have.property('user').and.to.be.an('object');\r",
+									"    pm.expect(subscriptionData.user).to.have.property('_id');\r",
+									"});\r",
+									"\r",
+									"// Prueba 5 (Avanzada): Verifica que el ID de la suscripción devuelta\r",
+									"// coincida con el ID que se pidió en la URL.\r",
+									"// NOTA: Esto funciona si usas variables de ruta en Postman, por ejemplo:\r",
+									"// GET .../subscriptions/:subscriptionId\r",
+									"// donde 'subscriptionId' es una variable.\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    // Asume que la última variable en la ruta es el ID que nos interesa.\r",
+									"    const requestedId = pathVariables[pathVariables.length - 1].value;\r",
+									"    \r",
+									"    pm.test(\"El ID de la suscripción coincide con el ID de la petición\", function () {\r",
+									"        pm.expect(subscriptionData._id).to.eql(requestedId, \"El ID en la respuesta no coincide con el ID en la URL\");\r",
+									"    });\r",
+									"} else {\r",
+									"    console.warn(\"No se encontraron variables de ruta en la URL. Se omite la prueba de coincidencia de ID.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/6860fd6ef10963bfca549205",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"6860fd6ef10963bfca549205"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSusbciptionsById-error-invalid-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API.\r",
+									"const responseData = pm.response.json();\r",
+									"// Guardamos el array de detalles en una variable para un acceso más fácil.\r",
+									"const errorDetails = responseData.error ? responseData.error.details : [];\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de ID Inválido en la URL ---\r",
+									"\r",
+									"// Prueba 1: Verifica el estado general de la respuesta.\r",
+									"pm.test(\"El código de estado debe ser 400 y 'success' debe ser false\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el mensaje de error principal.\r",
+									"pm.test(\"El mensaje principal debe indicar un error de validación\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Errores de validación en los datos enviados\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que el array 'details' contenga exactamente un error.\r",
+									"pm.test(\"El array 'details' debe contener un único error\", function () {\r",
+									"    pm.expect(errorDetails).to.be.an('array').and.to.have.lengthOf(1, \"Se esperaba un solo objeto en el array 'details'\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas Específicas del Detalle del Error ---\r",
+									"\r",
+									"// Como solo esperamos un error, podemos acceder a él directamente.\r",
+									"const idError = errorDetails[0];\r",
+									"\r",
+									"pm.test(\"El detalle del error debe corresponder al campo 'id'\", function () {\r",
+									"    pm.expect(idError.field).to.eql(\"id\");\r",
+									"    pm.expect(idError.message).to.eql(\"ID de suscripción no válido\");\r",
+									"});\r",
+									"\r",
+									"// Prueba avanzada: Verifica que el 'value' en el error coincida con el ID inválido que se envió.\r",
+									"// Asume que el ID se pasa como una variable de ruta en la URL (ej: /subscriptions/:id)\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    // Asume que la última variable de ruta es el ID que nos interesa.\r",
+									"    const invalidIdSent = pathVariables[pathVariables.length - 1].value;\r",
+									"    \r",
+									"    pm.test(\"El 'value' del error debe ser el ID inválido enviado en la petición\", function() {\r",
+									"        pm.expect(idError.value).to.eql(invalidIdSent);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.warn(\"No se encontraron variables de ruta en la URL. Se omite la prueba de coincidencia del valor del error.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/6860fd6ef10963bghg05",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"6860fd6ef10963bghg05"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSusbciptions-error-empty-token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de Autorización (Sin Token) ---\r",
+									"\r",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 401 Unauthorized.\r",
+									"// Es el código estándar para indicar que se requiere autenticación.\r",
+									"pm.test(\"El código de estado debe ser 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que el campo 'success' en el cuerpo sea 'false'.\r",
+									"pm.test(\"El campo 'success' debe ser false\", function () {\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica el mensaje de error específico.\r",
+									"// Confirma que la API informa claramente por qué fue rechazada la petición.\r",
+									"pm.test(\"El mensaje de error debe indicar que el token no fue proporcionado\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"No autorizado: token no proporcionado\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.\r",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 401\", function () {\r",
+									"    pm.expect(responseData.error.statusCode).to.eql(401);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSusbciptions-error-invalid-token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y la convierte en un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de Autorización (Token Inválido) ---\r",
+									"\r",
+									"// Prueba 1: Verifica que el código de estado HTTP sea 401 Unauthorized.\r",
+									"pm.test(\"El código de estado debe ser 401 Unauthorized\", function () {\r",
+									"    pm.response.to.have.status(401);\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que el campo 'success' en el cuerpo sea 'false'.\r",
+									"pm.test(\"El campo 'success' debe ser false\", function () {\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica el mensaje de error específico.\r",
+									"// Confirma que la API identifica correctamente un token corrupto o mal formado.\r",
+									"pm.test(\"El mensaje de error debe indicar que el token es inválido\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Token inválido o manipulado.\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 4: Verifica el código de estado dentro del cuerpo del error.\r",
+									"pm.test(\"El statusCode en el cuerpo del error debe ser 401\", function () {\r",
+									"    pm.expect(responseData.error.statusCode).to.eql(401);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "sdfsdfsdfsdfsdfdsf",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSubscription-renewal-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API como un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// --- Pruebas Básicas de la Respuesta ---\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// --- Prueba de Estructura Principal ---\r",
+									"pm.test(\"La respuesta debe contener una propiedad 'data' que sea un array\", function () {\r",
+									"    pm.expect(responseData.data).to.be.an('array', \"Se esperaba que 'data' fuera un array\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas de Contenido y Esquema del Array ---\r",
+									"// Este bloque es flexible y funciona si el array está vacío, tiene 1 o muchos items.\r",
+									"if (responseData.data && responseData.data.length > 0) {\r",
+									"    \r",
+									"\r",
+									"    // Bucle 'forEach' para validar CADA objeto dentro del array 'data'.\r",
+									"    // Aunque solo haya uno, este método es el más robusto.\r",
+									"    responseData.data.forEach(function(subscription, index) {\r",
+									"        pm.test(`Item #${index + 1}: La suscripción debe tener una estructura válida`, function () {\r",
+									"            // Verificamos que las propiedades más importantes existan y tengan el tipo de dato correcto.\r",
+									"            pm.expect(subscription).to.have.property('_id').and.to.be.a('string');\r",
+									"            pm.expect(subscription).to.have.property('name').and.to.be.a('string');\r",
+									"            pm.expect(subscription).to.have.property('price').and.to.be.a('number');\r",
+									"            pm.expect(subscription).to.have.property('user').and.to.be.an('object');\r",
+									"            pm.expect(subscription.user).to.have.property('email');\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"} else {\r",
+									"    // Si la lista estuviera vacía, los tests no fallarían, solo se registraría el caso.\r",
+									"    console.log(\"La lista 'data' está vacía, se omiten las validaciones de los items.\");\r",
+									"    pm.test(\"La lista 'data' está vacía, lo cual es un escenario válido\", function () {\r",
+									"        pm.expect(responseData.data).to.be.an('array').and.to.be.empty;\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/user/upcoming-renewals",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"user",
+								"upcoming-renewals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSuscriptions-user-stats-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y el objeto de datos.\r",
+									"const responseData = pm.response.json();\r",
+									"const statsData = responseData.data;\r",
+									"\r",
+									"// --- Suite de Pruebas para Estadísticas de Suscripciones ---\r",
+									"\r",
+									"// Prueba 1: Verifica el estado general de la respuesta.\r",
+									"pm.test(\"El código de estado debe ser 200 OK y 'success' debe ser true\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica la estructura y los tipos de datos de las estadísticas.\r",
+									"// Nos aseguramos de que todos los campos esperados estén presentes y sean números.\r",
+									"pm.test(\"El objeto 'data' debe contener todas las estadísticas con tipos de dato numéricos\", function () {\r",
+									"    pm.expect(statsData).to.be.an('object');\r",
+									"    pm.expect(statsData).to.have.property('totalSubscriptions').and.to.be.a('number');\r",
+									"    pm.expect(statsData).to.have.property('activeSubscriptions').and.to.be.a('number');\r",
+									"    pm.expect(statsData).to.have.property('cancelledSubscriptions').and.to.be.a('number');\r",
+									"    pm.expect(statsData).to.have.property('estimatedMonthlyExpense').and.to.be.a('number');\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Realiza pruebas de consistencia lógica sobre los datos.\r",
+									"// Estas pruebas son muy potentes porque verifican que los cálculos de tu API son correctos.\r",
+									"pm.test(\"Las estadísticas deben ser lógicamente consistentes\", function () {\r",
+									"    // El total de suscripciones no puede ser menor que las suscripciones activas.\r",
+									"    pm.expect(statsData.totalSubscriptions).to.be.at.least(statsData.activeSubscriptions, \"El total de suscripciones no puede ser menor que las activas.\");\r",
+									"    \r",
+									"    // El total de suscripciones debe ser la suma de las activas y las canceladas.\r",
+									"    const calculatedTotal = statsData.activeSubscriptions + statsData.cancelledSubscriptions;\r",
+									"    pm.expect(statsData.totalSubscriptions).to.eql(calculatedTotal, \"El total de suscripciones debe ser la suma de las activas y las canceladas.\");\r",
+									"\r",
+									"    // El gasto estimado no debe ser un número negativo.\r",
+									"    pm.expect(statsData.estimatedMonthlyExpense).to.be.at.least(0, \"El gasto mensual estimado no puede ser negativo.\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/user/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"user",
+								"stats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "putSubsciptions",
+			"item": [
+				{
+					"name": "updateSusbciptionById-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API y el cuerpo de la petición que se envió.\r",
+									"const responseData = pm.response.json();\r",
+									"const requestBody = pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+									"const updatedSubscription = responseData.data;\r",
+									"\r",
+									"// --- Suite de Pruebas para Actualización Exitosa de Suscripción ---\r",
+									"\r",
+									"// Prueba 1: Verifica el código de estado y el mensaje de éxito.\r",
+									"// 200 OK es el código estándar para una actualización exitosa que devuelve el contenido.\r",
+									"pm.test(\"El código de estado debe ser 200 OK y el mensaje correcto\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"    pm.expect(responseData.message).to.eql(\"Suscripción actualizada exitosamente\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica que el ID del recurso actualizado coincida con el ID de la petición.\r",
+									"// Esto asegura que actualizamos el registro correcto. Asume una URL como /subscriptions/:id\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    const requestedId = pathVariables[pathVariables.length - 1].value;\r",
+									"    pm.test(\"El ID en la respuesta debe coincidir con el ID en la URL\", function () {\r",
+									"        pm.expect(updatedSubscription._id).to.eql(requestedId);\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Prueba 3: ¡La prueba más importante! Verifica que los campos se actualizaron.\r",
+									"// Este script dinámico itera sobre todos los campos que enviaste en el cuerpo de la petición\r",
+									"// y comprueba que cada uno de ellos se haya actualizado en la respuesta.\r",
+									"pm.test(\"Los datos actualizados en la respuesta deben coincidir con los datos enviados en el Body\", function () {\r",
+									"    // Itera sobre las claves del objeto que enviaste (ej: \"name\", \"price\").\r",
+									"    Object.keys(requestBody).forEach(key => {\r",
+									"        console.log(`Verificando el campo: ${key}`);\r",
+									"        // Verifica que el valor en la respuesta sea igual al valor que enviaste para esa clave.\r",
+									"        pm.expect(updatedSubscription[key]).to.eql(requestBody[key], `El campo '${key}' no se actualizó correctamente.`);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Prueba 4 (Avanzada): Verifica que la fecha de actualización es posterior a la de creación.\r",
+									"// Esto es una buena señal de que el registro fue realmente modificado en la base de datos.\r",
+									"pm.test(\"La fecha 'updatedAt' debe ser posterior o igual a la fecha 'createdAt'\", function() {\r",
+									"    const createdAt = new Date(updatedSubscription.createdAt);\r",
+									"    const updatedAt = new Date(updatedSubscription.updatedAt);\r",
+									"    pm.expect(updatedAt).to.be.at.least(createdAt);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n\"name\":\"Nuevo nombre probando\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/68579ab4f968ae79ba3dbcd8",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"68579ab4f968ae79ba3dbcd8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateSusbciptionById-error-invalid-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API.\r",
+									"const responseData = pm.response.json();\r",
+									"const errorDetails = responseData.error ? responseData.error.details : [];\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de ID Inválido ---\r",
+									"\r",
+									"// Prueba 1: Verifica el estado general de la respuesta.\r",
+									"pm.test(\"El código de estado debe ser 400 y success debe ser false\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el mensaje de error principal.\r",
+									"pm.test(\"El mensaje principal debe indicar un error de validación\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Errores de validación en los datos enviados\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que el array 'details' contenga exactamente un error.\r",
+									"pm.test(\"La respuesta debe contener un array 'details' con un solo error\", function () {\r",
+									"    pm.expect(errorDetails).to.be.an('array').and.to.have.lengthOf(1, \"Se esperaba un solo objeto en el array 'details'\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas Específicas del Detalle del Error ---\r",
+									"\r",
+									"// Accedemos directamente al primer (y único) objeto de error.\r",
+									"const idError = errorDetails[0];\r",
+									"\r",
+									"pm.test(\"El detalle del error debe ser para el campo 'id' y tener el mensaje correcto\", function () {\r",
+									"    pm.expect(idError.field).to.eql(\"id\");\r",
+									"    pm.expect(idError.message).to.eql(\"ID de suscripción no válido\");\r",
+									"});\r",
+									"\r",
+									"// Prueba avanzada: Verifica que el 'value' en el error coincida con el ID inválido que se envió.\r",
+									"// Asume que el ID se pasa como una variable de ruta, ej: /subscriptions/:id\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    // Asume que la última variable de ruta es el ID que nos interesa.\r",
+									"    const invalidIdSent = pathVariables[pathVariables.length - 1].value;\r",
+									"    \r",
+									"    pm.test(\"El valor del error debe ser el ID inválido que se envió en la URL\", function() {\r",
+									"        pm.expect(idError.value).to.eql(invalidIdSent);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.warn(\"No se encontraron variables de ruta en la URL. Se omite la prueba de coincidencia del valor de error.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n\"name\":\"Nuevo nombre probando\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/68579ab4f968ae79bcd8",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"68579ab4f968ae79bcd8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "deleteSubsciptions",
+			"item": [
+				{
+					"name": "deleteSusbciptionById-succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// --- Pruebas para Eliminación Exitosa de Suscripción ---\r",
+									"\r",
+									"// Prueba 1: Verifica el código de estado HTTP.\r",
+									"// 200 OK es una respuesta común para un DELETE exitoso que devuelve un mensaje.\r",
+									"// A veces también se usa 204 No Content, pero en tu caso es 200.\r",
+									"pm.test(\"El código de estado debe ser 200 OK\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// Obtiene la respuesta de la API como un objeto JSON.\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"// Prueba 2: Verifica que la operación fue exitosa.\r",
+									"pm.test(\"La operación debe ser exitosa ('success' es true)\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica el mensaje de confirmación de la eliminación.\r",
+									"pm.test(\"El mensaje debe confirmar la eliminación exitosa\", function () {\r",
+									"    pm.expect(responseData.message).to.eql(\"Suscripción eliminada exitosamente\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n\"name\":\"Nuevo nombre probando\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/6861036cf10963bfca549240",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"6861036cf10963bfca549240"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteSusbciptionById-error-invalid-id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Obtiene la respuesta de la API.\r",
+									"const responseData = pm.response.json();\r",
+									"const errorDetails = responseData.error ? responseData.error.details : [];\r",
+									"\r",
+									"// --- Suite de Pruebas para Error de ID Inválido ---\r",
+									"\r",
+									"// Prueba 1: Verifica el estado general de la respuesta.\r",
+									"pm.test(\"El código de estado debe ser 400 y success debe ser false\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"    pm.expect(responseData.success).to.be.false;\r",
+									"});\r",
+									"\r",
+									"// Prueba 2: Verifica el mensaje de error principal.\r",
+									"pm.test(\"El mensaje principal debe indicar un error de validación\", function () {\r",
+									"    pm.expect(responseData.error.message).to.eql(\"Errores de validación en los datos enviados\");\r",
+									"});\r",
+									"\r",
+									"// Prueba 3: Verifica que el array 'details' contenga exactamente un error.\r",
+									"pm.test(\"La respuesta debe contener un array 'details' con un solo error\", function () {\r",
+									"    pm.expect(errorDetails).to.be.an('array').and.to.have.lengthOf(1, \"Se esperaba un solo objeto en el array 'details'\");\r",
+									"});\r",
+									"\r",
+									"// --- Pruebas Específicas del Detalle del Error ---\r",
+									"\r",
+									"// Accedemos directamente al primer (y único) objeto de error.\r",
+									"const idError = errorDetails[0];\r",
+									"\r",
+									"pm.test(\"El detalle del error debe ser para el campo 'id' y tener el mensaje correcto\", function () {\r",
+									"    pm.expect(idError.field).to.eql(\"id\");\r",
+									"    pm.expect(idError.message).to.eql(\"ID de suscripción no válido\");\r",
+									"});\r",
+									"\r",
+									"// Prueba avanzada: Verifica que el 'value' en el error coincida con el ID inválido que se envió en la URL.\r",
+									"// Asume que usas una variable de ruta en Postman como /:id\r",
+									"const pathVariables = pm.request.url.variables.all();\r",
+									"if (pathVariables.length > 0) {\r",
+									"    // Asume que la última variable de ruta es el ID que nos interesa.\r",
+									"    const invalidIdSent = pathVariables[pathVariables.length - 1].value;\r",
+									"    \r",
+									"    pm.test(\"El valor del error debe ser el ID inválido que se envió en la URL\", function() {\r",
+									"        pm.expect(idError.value).to.eql(invalidIdSent);\r",
+									"    });\r",
+									"} else {\r",
+									"    console.warn(\"No se encontraron variables de ruta en la URL. Se omite la prueba de coincidencia del valor de error.\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n\"name\":\"Nuevo nombre probando\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/subscriptions/6861036cf10963bfcasdsd",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscriptions",
+								"6861036cf10963bfcasdsd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODU1ZTc2YjViZGIwMzVlM2Q1ZGVmMDQiLCJpYXQiOjE3NTExODYwOTYsImV4cCI6MTc1MTc5MDg5Nn0.oGKnAdZ-ZtrKH4pgk_l4SeUf5JfZoMYosdmS2gv6J9w",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODU1ZTc2YjViZGIwMzVlM2Q1ZGVmMDQiLCJpYXQiOjE3NTExODYwOTYsImV4cCI6MTc1MTc5MDg5Nn0.oGKnAdZ-ZtrKH4pgk_l4SeUf5JfZoMYosdmS2gv6J9w",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:4000",
+			"type": "string"
+		}
+	]
+}
