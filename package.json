@@ -17,7 +17,7 @@
     "test:user": "node scripts/create-test-user.js",
     "test:token": "node scripts/get-testing-token.js",
     "generate:jwt": "node scripts/generate-jwt-secret.js",
-    "test-api": "newman run SuscriApp.postman_collection.json --reporters cli,json,htmlextra --reporter-json-export test-results/reporte.json --reporter-htmlextra-export test-results/reporte.html" 
+    "test-api": "newman run SuscriApp.postman_collection.json --reporters cli,htmlextra  --reporter-htmlextra-export test-results/reporte.html" 
   },
   "dependencies": {
     "@arcjet/inspect": "^1.0.0-beta.8",
