@@ -1,65 +1,65 @@
 {
-	"id": "16b1716b-1177-4322-83ca-6fc652aba932",
+	"id": "20570c40-7d54-4a2e-8270-d920f80196a0",
 	"name": "SuscriApp",
-	"timestamp": "2025-06-30T05:42:17.831Z",
+	"timestamp": "2025-06-30T05:31:41.934Z",
 	"collection_id": "27060984-f43277bf-682b-4e0c-b934-f76604d833d6",
 	"folder_id": 0,
 	"environment_id": "0",
-	"totalPass": 159,
+	"totalPass": 170,
 	"delay": 0,
 	"persist": true,
 	"status": "finished",
-	"startedAt": "2025-06-30T05:42:07.861Z",
-	"totalFail": 13,
+	"startedAt": "2025-06-30T05:31:31.785Z",
+	"totalFail": 0,
 	"results": [
 		{
 			"id": "f61fdeea-005d-42f7-8318-50674fb44055",
 			"name": "createUser-succes",
 			"url": "http://localhost:4000/api/v1/auth/sign-up",
-			"time": 439,
+			"time": 665,
 			"responseCode": {
-				"code": 409,
-				"name": "Conflict"
+				"code": 201,
+				"name": "Created"
 			},
 			"tests": {
-				"El código de estado debe ser 201 Created": false,
-				"El campo 'success' debe ser true": false,
-				"El mensaje debe ser 'Usuario creado exitosamente'": false,
-				"La respuesta debe contener un token y los datos del usuario": false,
-				"El token no debe ser nulo o vacío": false
+				"El código de estado debe ser 201 Created": true,
+				"El campo 'success' debe ser true": true,
+				"El mensaje debe ser 'Usuario creado exitosamente'": true,
+				"La respuesta debe contener un token y los datos del usuario": true,
+				"El token no debe ser nulo o vacío": true
 			},
 			"testPassFailCounts": {
 				"El código de estado debe ser 201 Created": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"El campo 'success' debe ser true": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"El mensaje debe ser 'Usuario creado exitosamente'": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"La respuesta debe contener un token y los datos del usuario": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"El token no debe ser nulo o vacío": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				}
 			},
 			"times": [
-				439
+				665
 			],
 			"allTests": [
 				{
-					"El código de estado debe ser 201 Created": false,
-					"El campo 'success' debe ser true": false,
-					"El mensaje debe ser 'Usuario creado exitosamente'": false,
-					"La respuesta debe contener un token y los datos del usuario": false,
-					"El token no debe ser nulo o vacío": false
+					"El código de estado debe ser 201 Created": true,
+					"El campo 'success' debe ser true": true,
+					"El mensaje debe ser 'Usuario creado exitosamente'": true,
+					"La respuesta debe contener un token y los datos del usuario": true,
+					"El token no debe ser nulo o vacío": true
 				}
 			]
 		},
@@ -67,7 +67,7 @@
 			"id": "eea041d5-cd54-4ffd-b0db-b220db665e19",
 			"name": "createUser-invalid-emails",
 			"url": "http://localhost:4000/api/v1/auth/sign-up",
-			"time": 101,
+			"time": 105,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -97,7 +97,7 @@
 				}
 			},
 			"times": [
-				101
+				105
 			],
 			"allTests": [
 				{
@@ -112,7 +112,7 @@
 			"id": "ce3a782e-ad5f-4fb7-aa02-8b1e43318514",
 			"name": "createUser-empty-fields",
 			"url": "http://localhost:4000/api/v1/auth/sign-up",
-			"time": 99,
+			"time": 108,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -142,7 +142,7 @@
 				}
 			},
 			"times": [
-				99
+				108
 			],
 			"allTests": [
 				{
@@ -157,7 +157,7 @@
 			"id": "0c95f765-d4c7-49fe-a1cd-0004f6a7dc63",
 			"name": "login-succes",
 			"url": "http://localhost:4000/api/v1/auth/sign-in",
-			"time": 264,
+			"time": 255,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -182,7 +182,7 @@
 				}
 			},
 			"times": [
-				264
+				255
 			],
 			"allTests": [
 				{
@@ -196,7 +196,7 @@
 			"id": "eec077a8-2491-453b-b847-21cd3a434e52",
 			"name": "login-error-credentials",
 			"url": "http://localhost:4000/api/v1/auth/sign-in",
-			"time": 266,
+			"time": 258,
 			"responseCode": {
 				"code": 401,
 				"name": "Unauthorized"
@@ -226,7 +226,7 @@
 				}
 			},
 			"times": [
-				266
+				258
 			],
 			"allTests": [
 				{
@@ -241,7 +241,7 @@
 			"id": "00feb5c9-5e87-421e-9cb0-fe085af1bcc5",
 			"name": "login-error-empty-fields",
 			"url": "http://localhost:4000/api/v1/auth/sign-in",
-			"time": 101,
+			"time": 103,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -271,7 +271,7 @@
 				}
 			},
 			"times": [
-				101
+				103
 			],
 			"allTests": [
 				{
@@ -286,7 +286,7 @@
 			"id": "9e5c8137-6644-47a3-9a14-8e8d5acc21ca",
 			"name": "createSubscription-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions",
-			"time": 365,
+			"time": 371,
 			"responseCode": {
 				"code": 201,
 				"name": "Created"
@@ -321,7 +321,7 @@
 				}
 			},
 			"times": [
-				365
+				371
 			],
 			"allTests": [
 				{
@@ -337,7 +337,7 @@
 			"id": "0901c96d-a23b-45f7-a6e2-08a1927128ba",
 			"name": "createSubscription-error-invalid-fields",
 			"url": "http://localhost:4000/api/v1/subscriptions",
-			"time": 185,
+			"time": 189,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -357,7 +357,7 @@
 				}
 			},
 			"times": [
-				185
+				189
 			],
 			"allTests": [
 				{
@@ -370,7 +370,7 @@
 			"id": "bc478b1f-b446-422a-b2e0-9064cd1d25ce",
 			"name": "getUsers-success",
 			"url": "http://localhost:4000/api/v1/users",
-			"time": 351,
+			"time": 361,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -450,7 +450,7 @@
 				}
 			},
 			"times": [
-				351
+				361
 			],
 			"allTests": [
 				{
@@ -474,8 +474,8 @@
 		{
 			"id": "e9e027fa-a4b1-42d2-8867-b6f63b1aa0d9",
 			"name": "deleteUsers-success",
-			"url": "http://localhost:4000/api/v1/users/6860fa54f10963bfca5491f2",
-			"time": 272,
+			"url": "http://localhost:4000/api/v1/users/68621f72dec8fea512a84619",
+			"time": 275,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -500,7 +500,7 @@
 				}
 			},
 			"times": [
-				272
+				275
 			],
 			"allTests": [
 				{
@@ -514,7 +514,7 @@
 			"id": "0f6570ee-9dfd-498f-9a0f-39f0ba96a648",
 			"name": "deleteUsers-error-invalid-id",
 			"url": "http://localhost:4000/api/v1/users/asdasdasdas",
-			"time": 186,
+			"time": 188,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -549,7 +549,7 @@
 				}
 			},
 			"times": [
-				186
+				188
 			],
 			"allTests": [
 				{
@@ -565,50 +565,50 @@
 			"id": "fd2254ee-28a0-4138-896a-d5ef66e25671",
 			"name": "putUsers-success",
 			"url": "http://localhost:4000/api/v1/users/6860fa54f10963bfca5491f2",
-			"time": 273,
+			"time": 288,
 			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
+				"code": 200,
+				"name": "OK"
 			},
 			"tests": {
-				"El código de estado es 200": false,
-				"La respuesta tiene la propiedad 'success' en true": false,
-				"El mensaje es 'Usuario actualizado exitosamente'": false,
-				"La respuesta contiene el objeto 'data' con la información del usuario": false,
-				"El objeto 'data' contiene _id, email y updatedAt": false
+				"El código de estado es 200": true,
+				"La respuesta tiene la propiedad 'success' en true": true,
+				"El mensaje es 'Usuario actualizado exitosamente'": true,
+				"La respuesta contiene el objeto 'data' con la información del usuario": true,
+				"El objeto 'data' contiene _id, email y updatedAt": true
 			},
 			"testPassFailCounts": {
 				"El código de estado es 200": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"La respuesta tiene la propiedad 'success' en true": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"El mensaje es 'Usuario actualizado exitosamente'": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"La respuesta contiene el objeto 'data' con la información del usuario": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"El objeto 'data' contiene _id, email y updatedAt": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				}
 			},
 			"times": [
-				273
+				288
 			],
 			"allTests": [
 				{
-					"El código de estado es 200": false,
-					"La respuesta tiene la propiedad 'success' en true": false,
-					"El mensaje es 'Usuario actualizado exitosamente'": false,
-					"La respuesta contiene el objeto 'data' con la información del usuario": false,
-					"El objeto 'data' contiene _id, email y updatedAt": false
+					"El código de estado es 200": true,
+					"La respuesta tiene la propiedad 'success' en true": true,
+					"El mensaje es 'Usuario actualizado exitosamente'": true,
+					"La respuesta contiene el objeto 'data' con la información del usuario": true,
+					"El objeto 'data' contiene _id, email y updatedAt": true
 				}
 			]
 		},
@@ -616,7 +616,7 @@
 			"id": "18584c83-be59-46b0-b089-39cf97475103",
 			"name": "putUsers-error-empty-fields",
 			"url": "http://localhost:4000/api/v1/users/6860fa54f10963bfca5491f2",
-			"time": 186,
+			"time": 193,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -651,7 +651,7 @@
 				}
 			},
 			"times": [
-				186
+				193
 			],
 			"allTests": [
 				{
@@ -667,7 +667,7 @@
 			"id": "f9027f1a-bbf7-4ce4-b62c-d064e875972d",
 			"name": "getUserById-success",
 			"url": "http://localhost:4000/api/v1/users/6855e76b5bdb035e3d5def04",
-			"time": 269,
+			"time": 270,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -697,7 +697,7 @@
 				}
 			},
 			"times": [
-				269
+				270
 			],
 			"allTests": [
 				{
@@ -712,7 +712,7 @@
 			"id": "28fbd7c0-0193-4552-b1d0-c33eb344919d",
 			"name": "getUserById-error-invalid-id",
 			"url": "http://localhost:4000/api/v1/users/6855e76b5bdb",
-			"time": 186,
+			"time": 204,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -742,7 +742,7 @@
 				}
 			},
 			"times": [
-				186
+				204
 			],
 			"allTests": [
 				{
@@ -757,7 +757,7 @@
 			"id": "cc6bd082-7cab-4d1c-bce7-e9463aadd330",
 			"name": "getSuscriptionsUserById-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions/users/6855e76b5bdb035e3d5def04",
-			"time": 357,
+			"time": 360,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -782,7 +782,7 @@
 				}
 			},
 			"times": [
-				357
+				360
 			],
 			"allTests": [
 				{
@@ -796,7 +796,7 @@
 			"id": "37d469ee-9203-484c-a268-f175422f26df",
 			"name": "getSuscriptionsUserById-error-invalid-id",
 			"url": "http://localhost:4000/api/v1/subscriptions/users/6855e76b5bdb035e3d5sdsdef04",
-			"time": 186,
+			"time": 192,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -826,7 +826,7 @@
 				}
 			},
 			"times": [
-				186
+				192
 			],
 			"allTests": [
 				{
@@ -841,7 +841,7 @@
 			"id": "f4897eb8-8812-492a-a340-5d56f0498aae",
 			"name": "getSusbciptions-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions",
-			"time": 448,
+			"time": 510,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -926,7 +926,7 @@
 				}
 			},
 			"times": [
-				448
+				510
 			],
 			"allTests": [
 				{
@@ -952,7 +952,7 @@
 			"id": "244160f5-db24-4a12-8b45-5bf2b281d20d",
 			"name": "getSusbciptionsById-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions/6860fd6ef10963bfca549205",
-			"time": 360,
+			"time": 356,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -982,7 +982,7 @@
 				}
 			},
 			"times": [
-				360
+				356
 			],
 			"allTests": [
 				{
@@ -997,7 +997,7 @@
 			"id": "04fb46d6-797e-4a10-9289-f4711e2f9dab",
 			"name": "getSusbciptionsById-error-invalid-id",
 			"url": "http://localhost:4000/api/v1/subscriptions/6860fd6ef10963bghg05",
-			"time": 191,
+			"time": 186,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -1027,7 +1027,7 @@
 				}
 			},
 			"times": [
-				191
+				186
 			],
 			"allTests": [
 				{
@@ -1042,7 +1042,7 @@
 			"id": "bd8e502a-7188-4876-89d7-26fa4e1c1925",
 			"name": "getSusbciptions-error-empty-token",
 			"url": "http://localhost:4000/api/v1/subscriptions",
-			"time": 98,
+			"time": 105,
 			"responseCode": {
 				"code": 401,
 				"name": "Unauthorized"
@@ -1072,7 +1072,7 @@
 				}
 			},
 			"times": [
-				98
+				105
 			],
 			"allTests": [
 				{
@@ -1087,7 +1087,7 @@
 			"id": "26ce40b0-6a69-4861-8d8e-35e5ae34b493",
 			"name": "getSusbciptions-error-invalid-token",
 			"url": "http://localhost:4000/api/v1/subscriptions",
-			"time": 102,
+			"time": 100,
 			"responseCode": {
 				"code": 401,
 				"name": "Unauthorized"
@@ -1117,7 +1117,7 @@
 				}
 			},
 			"times": [
-				102
+				100
 			],
 			"allTests": [
 				{
@@ -1132,7 +1132,7 @@
 			"id": "2802d9d5-2617-4406-a620-60a333fd15fa",
 			"name": "getSubscription-renewal-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions/user/upcoming-renewals",
-			"time": 359,
+			"time": 360,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1181,9 +1181,7 @@
 				"Item #38: La suscripción debe tener una estructura válida": true,
 				"Item #39: La suscripción debe tener una estructura válida": true,
 				"Item #40: La suscripción debe tener una estructura válida": true,
-				"Item #41: La suscripción debe tener una estructura válida": true,
-				"Item #42: La suscripción debe tener una estructura válida": true,
-				"Item #43: La suscripción debe tener una estructura válida": true
+				"Item #41: La suscripción debe tener una estructura válida": true
 			},
 			"testPassFailCounts": {
 				"El código de estado debe ser 200 OK": {
@@ -1361,18 +1359,10 @@
 				"Item #41: La suscripción debe tener una estructura válida": {
 					"pass": 1,
 					"fail": 0
-				},
-				"Item #42: La suscripción debe tener una estructura válida": {
-					"pass": 1,
-					"fail": 0
-				},
-				"Item #43: La suscripción debe tener una estructura válida": {
-					"pass": 1,
-					"fail": 0
 				}
 			},
 			"times": [
-				359
+				360
 			],
 			"allTests": [
 				{
@@ -1419,9 +1409,7 @@
 					"Item #38: La suscripción debe tener una estructura válida": true,
 					"Item #39: La suscripción debe tener una estructura válida": true,
 					"Item #40: La suscripción debe tener una estructura válida": true,
-					"Item #41: La suscripción debe tener una estructura válida": true,
-					"Item #42: La suscripción debe tener una estructura válida": true,
-					"Item #43: La suscripción debe tener una estructura válida": true
+					"Item #41: La suscripción debe tener una estructura válida": true
 				}
 			]
 		},
@@ -1429,7 +1417,7 @@
 			"id": "ce1d28ca-f79d-4039-9022-abe5668cb043",
 			"name": "getSuscriptions-user-stats-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions/user/stats",
-			"time": 500,
+			"time": 353,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1454,7 +1442,7 @@
 				}
 			},
 			"times": [
-				500
+				353
 			],
 			"allTests": [
 				{
@@ -1468,7 +1456,7 @@
 			"id": "39d11de5-c7e7-4d8e-9971-6208122d7a94",
 			"name": "updateSusbciptionById-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions/6861ab1653595349e192fc3f",
-			"time": 456,
+			"time": 476,
 			"responseCode": {
 				"code": 200,
 				"name": "OK"
@@ -1493,7 +1481,7 @@
 				}
 			},
 			"times": [
-				456
+				476
 			],
 			"allTests": [
 				{
@@ -1507,7 +1495,7 @@
 			"id": "bc2f0f32-65ce-4c32-8f09-74e8d2eea624",
 			"name": "updateSusbciptionById-error-invalid-id",
 			"url": "http://localhost:4000/api/v1/subscriptions/68579ab4f968ae79bcd8",
-			"time": 187,
+			"time": 195,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -1537,7 +1525,7 @@
 				}
 			},
 			"times": [
-				187
+				195
 			],
 			"allTests": [
 				{
@@ -1552,38 +1540,38 @@
 			"id": "985eb2ed-67ab-490e-869c-0999d7a0eef9",
 			"name": "deleteSusbciptionById-succes",
 			"url": "http://localhost:4000/api/v1/subscriptions/6861b5006d3a708601edab28",
-			"time": 275,
+			"time": 459,
 			"responseCode": {
-				"code": 404,
-				"name": "Not Found"
+				"code": 200,
+				"name": "OK"
 			},
 			"tests": {
-				"El código de estado debe ser 200 OK": false,
-				"La operación debe ser exitosa ('success' es true)": false,
-				"El mensaje debe confirmar la eliminación exitosa": false
+				"El código de estado debe ser 200 OK": true,
+				"La operación debe ser exitosa ('success' es true)": true,
+				"El mensaje debe confirmar la eliminación exitosa": true
 			},
 			"testPassFailCounts": {
 				"El código de estado debe ser 200 OK": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"La operación debe ser exitosa ('success' es true)": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				},
 				"El mensaje debe confirmar la eliminación exitosa": {
-					"pass": 0,
-					"fail": 1
+					"pass": 1,
+					"fail": 0
 				}
 			},
 			"times": [
-				275
+				459
 			],
 			"allTests": [
 				{
-					"El código de estado debe ser 200 OK": false,
-					"La operación debe ser exitosa ('success' es true)": false,
-					"El mensaje debe confirmar la eliminación exitosa": false
+					"El código de estado debe ser 200 OK": true,
+					"La operación debe ser exitosa ('success' es true)": true,
+					"El mensaje debe confirmar la eliminación exitosa": true
 				}
 			]
 		},
@@ -1591,7 +1579,7 @@
 			"id": "ece4acb6-5d3a-426c-8ab8-3029cb86c503",
 			"name": "deleteSusbciptionById-error-invalid-id",
 			"url": "http://localhost:4000/api/v1/subscriptions/6861036cf10963bfcasdsd",
-			"time": 183,
+			"time": 186,
 			"responseCode": {
 				"code": 400,
 				"name": "Bad Request"
@@ -1621,7 +1609,7 @@
 				}
 			},
 			"times": [
-				183
+				186
 			],
 			"allTests": [
 				{
@@ -1634,7 +1622,7 @@
 		}
 	],
 	"count": 1,
-	"totalTime": 7245,
+	"totalTime": 7671,
 	"collection": {
 		"requests": [
 			{
